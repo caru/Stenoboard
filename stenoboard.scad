@@ -31,7 +31,7 @@ boardCenter = [46,-41.25,0];
 rightRReference = boardCenter + [-hKeyDistance * 1.5, -22, 0];
 rightEReference = rightRReference + [-11.3, -27, 0];
 screwFrameVerticalOffset = 8.7;
-leftVowelsOffset = 11.3 * 2 + hKeyDistance * 3 - 14.5;
+leftVowelsOffset = 11.3 * 2 + hKeyDistance * 3 - 14.5 - 0.65;
 screw1 = [103.9, 2.5, 0];
 screw2 = [-12.75, 2.5, 0];
 screw3 = [-12.75, -62.5, 0];
@@ -71,13 +71,11 @@ rightVowelsBaseScrewD = 3.5;
 translate([-46, 10, 0]) translate([0, 0, 2]) barKeyboard();
 //barButtonContact();
 //rightBaseBridgeTest();
-//translate([-46, 50, 0]) base();
+//translate([-45.73, 50, 0]) base();
 //translate([0, 130, 0])
-//translate([-46, 50, 0]) base(isRight = false);
+//translate([-45.73, 50, 0]) base(isRight = false);
 //translate([0, 0, rightVowelsScrewH + screwFrameVerticalOffset + 0.2])
 //translate([-14.5, 75, 0]) vowelsKeyboard();
-
-
 
 // MODULES
 
