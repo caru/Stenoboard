@@ -76,6 +76,7 @@ translate([-46, 10, 0]) translate([0, 0, 2]) barKeyboard();
 //translate([-45.73, 50, 0]) base(isRight = false);
 //translate([0, 0, rightVowelsScrewH + screwFrameVerticalOffset + 0.2])
 //translate([-14.5, 75, 0]) vowelsKeyboard();
+//translate([-45.73, 50, 0]) cover();
 
 // MODULES
 
@@ -342,5 +343,22 @@ module rightBaseBridgeTest() {
   intersection() {
     base(drawVowels = true);
     translate([-20,-37, 18]) cube([12, 47, 7]);
+  }
+}
+
+// This is meant to serve as a cheap shipping cover, to protect the keys
+module cover(keys = 6, baseH = 0.6, lowScrewH = 1.2 + 2, highScrewH = 1.2 + 2 + 2, screwHolderR = 3) {
+  difference() {
+    union() {
+      translate(framePosition) beveledCube([17 + hKeyDistance * keys, 79, highScrewH + baseH], center = false, bevelR = 8, bevelSegments = 20);
+    }
+    for(i = [0:3]) translate(frameScrewPositions[i] + [0, 0, -1]) cylinder(r = frameScrewD / 2 + 0.25, h = 100);
+    difference() {
+      translate(framePosition + [-0.5, -0.5, baseH]) beveledCube([17 + hKeyDistance * keys + 1, 79 + 1, highScrewH + baseH], center = false, bevelR = 8, bevelSegments = 20);
+      translate(frameScrewPositions[0]) cylinder(r=screwHolderR, h = baseH + lowScrewH);
+      translate(frameScrewPositions[1]) cylinder(r=screwHolderR, h = baseH + lowScrewH);
+      translate(frameScrewPositions[2]) cylinder(r=screwHolderR, h = baseH + highScrewH);
+      translate(frameScrewPositions[3]) cylinder(r=screwHolderR, h = baseH + highScrewH);
+    }
   }
 }
