@@ -347,18 +347,18 @@ module rightBaseBridgeTest() {
 }
 
 // This is meant to serve as a cheap shipping cover, to protect the keys
-module cover(keys = 6, baseH = 0.6, lowScrewH = 1.2 + 2, highScrewH = 1.2 + 2 + 2, screwHolderR = 3) {
+module cover(keys = 6, baseH = 0.6, lowScrewH = 1.2 + 2, highScrewH = 1.2 + 2 + 2, screwHolderR1 = 3.5, screwHolderR2 = 2.75) {
   difference() {
     union() {
       translate(framePosition) beveledCube([17 + hKeyDistance * keys, 79, highScrewH + baseH], center = false, bevelR = 8, bevelSegments = 20);
     }
-    for(i = [0:3]) translate(frameScrewPositions[i] + [0, 0, -1]) cylinder(r = frameScrewD / 2 + 0.25, h = 100);
+    for(i = [0:3]) translate(frameScrewPositions[i] + [0, 0, -1]) cylinder(r = frameScrewD / 2 + 0.5, h = 100);
     difference() {
       translate(framePosition + [-0.5, -0.5, baseH]) beveledCube([17 + hKeyDistance * keys + 1, 79 + 1, highScrewH + baseH], center = false, bevelR = 8, bevelSegments = 20);
-      translate(frameScrewPositions[0]) cylinder(r=screwHolderR, h = baseH + lowScrewH);
-      translate(frameScrewPositions[1]) cylinder(r=screwHolderR, h = baseH + lowScrewH);
-      translate(frameScrewPositions[2]) cylinder(r=screwHolderR, h = baseH + highScrewH);
-      translate(frameScrewPositions[3]) cylinder(r=screwHolderR, h = baseH + highScrewH);
+      translate(frameScrewPositions[0]) cylinder(r1=screwHolderR1 , r2=screwHolderR2, h = baseH + lowScrewH);
+      translate(frameScrewPositions[1]) cylinder(r1=screwHolderR1 , r2=screwHolderR2, h = baseH + lowScrewH);
+      translate(frameScrewPositions[2]) cylinder(r1=screwHolderR1 , r2=screwHolderR2, h = baseH + highScrewH);
+      translate(frameScrewPositions[3]) cylinder(r1=screwHolderR1 , r2=screwHolderR2, h = baseH + highScrewH);
     }
   }
 }
