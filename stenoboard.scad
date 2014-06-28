@@ -41,7 +41,7 @@ frameScrewD = 3.2;
 mainRightScrewPositions = [[-37.465,11.43,0], [40.64,13.97,0], [-34.29,-10.795,0], [34.925,-10.795,0]];
 mainRightScrewBevels = [[false, false, true, false], [true, false, false, true], [false, true, true, true], [true, false, true, true]];
 mainRightScrewH = 19.2;
-mainRightScrewD = 3.5;
+mainRightScrewD = 3.3;
 mainLeftScrewPositions = [[-16.51,12.065,0], [40.005,13.335,0], [-34.29,-10.795,0], [36.83,-11.43,0]];
 mainLeftScrewBevels = [[true, true, true, true], [true, true, true, true], [true, true, true, true], [true, true, true, true]];
 rightVowelsScrewPositions = [[-1.27,9.525,0], [16.51,9.525,0], [7.62,-9.525,0]];
@@ -68,12 +68,12 @@ rightVowelsBaseScrewD = 3.5;
 
 
 //translate([-46, 35, 0]) consonantsKeyboard(keys = 6, numberKeyIndex = 3, rightWideKeyIndex = 0, leftWideKeyIndex = 5, drawTopRow = true, drawBottomRow = true, drawFrame = true);
-translate([-46, 10, 0]) translate([0, 0, 2]) barKeyboard();
+//translate([-46, 10, 0]) translate([0, 0, 2]) barKeyboard();
 //barButtonContact();
 //rightBaseBridgeTest();
 //translate([-45.73, 50, 0]) base();
 //translate([0, 130, 0])
-//translate([-45.73, 50, 0]) base(isRight = false);
+translate([-45.73, 50, 0]) base(isRight = false);
 //translate([0, 0, rightVowelsScrewH + screwFrameVerticalOffset + 0.2])
 //translate([-14.5, 75, 0]) vowelsKeyboard();
 //translate([-45.73, 50, 0]) cover();
