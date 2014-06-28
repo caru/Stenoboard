@@ -115,7 +115,7 @@ module bottomRowKeySurface(keyW = 13, keyD = 25, keyH = 1.25, isRightWideKey = f
     translate([-keyW / 2 + (isLeftWideKey ? -2.5 : 0), -keyD / 2, 0]) beveledCube([keyW + (isLeftWideKey ? 2.5 : 0) + (isRightWideKey ? 2.5 : 0), keyD, keyH]);
     if(drawKeySurfaceDifference && drawDifference) {
       translate([0, 25 - (keyD / 2 - keyW / 2), 29.5 + keyH]) rotate([90, 0, 0]) cylinder(r = 30, h = 50, center = true, $fn = keySurfaceDifferenceFn);
-      translate([0, -(keyD / 2 - keyW / 2), 29.53 + keyH]) sphere(r = 30, $fn = keySurfaceDifferenceFn);
+      translate([0, -(keyD / 2 - keyW / 2), 29.49 + keyH]) rotate([90, 0, 0]) sphere(r = 30, $fn = keySurfaceDifferenceFn);
     }
   }
 }
