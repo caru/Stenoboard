@@ -197,7 +197,7 @@ module fakeKey(armL, armW) {
   keyArm(armWidth = armW, armLength = 23, armHeight = 3, pivotDepth = 0);
 }
 
-module frame(keys = 6, differenceH = -1, holeIncrease = [0 , 0], frameH = 2, cutTopFrame = 2, cutBottomFrame = 0) {
+module frame(keys = 6, differenceH = -1, holeIncrease = [-3 , 0], frameH = 2, cutTopFrame = 2, cutBottomFrame = 0) {
   difference() {
     beveledCube([17 + hKeyDistance * keys, 79, frameH], center = false, bevelR = 8, bevelSegments = 20);
     translate([9 - holeIncrease[0] / 2, 3, differenceH]) beveledCube([-1 + hKeyDistance * keys + holeIncrease[0], 66 + holeIncrease[1], frameH * 2], center = false);
