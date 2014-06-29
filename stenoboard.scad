@@ -155,10 +155,10 @@ module numberBarAssembly(pivotLength = 16.5, pivotHeight = 5, pivotDepth = 3.25,
   translate([-9.14 + numberKeyIndex * hKeyDistance, 0, 0]) carvedArm(armL = armLength, armW = 3.5, levelH = 1.6, firstLevelH = 0.4, levelTranslateIncrement = 2, levels = 2, drawFakeKey = false);
 
   translate([9 + -hKeyDistance, 0, 0]) mirror([0, 0, 0]) union() {
-    translate([2.5, 0.5, 0]) carvedArm(armL = 8, armW = 2, levelH = 0.25, firstLevelH = 0.4, levelTranslateIncrement = 7, levels = 2, drawFakeKey = false, bevel = false);
+    translate([5.5, 0.5, 0]) carvedArm(armL = 8, armW = 2, levelH = 0.25, firstLevelH = 0.4, levelTranslateIncrement = 7, levels = 2, drawFakeKey = false, bevel = false);
   }
   translate([9 + hKeyDistance * (keys - 1), 0, 0]) mirror([-1, 0, 0]) union() {
-    translate([2.5, 0.5, 0]) carvedArm(armL = 8, armW = 2, levelH = 0.25, firstLevelH = 0.4, levelTranslateIncrement = 7, levels = 2, drawFakeKey = false, bevel = false);
+    translate([5.5, 0.5, 0]) carvedArm(armL = 8, armW = 2, levelH = 0.25, firstLevelH = 0.4, levelTranslateIncrement = 7, levels = 2, drawFakeKey = false, bevel = false);
   }
   for (i = [0 : -1]) for (j = [0 : keys - 2]) translate([9 + j * hKeyDistance, 0, 0]) mirror([i, 0, 0]) union() {
     if(j != numberKeyIndex - 1) translate([0, 0.25, 0]) carvedArm(armL = 8, armW = armWidth, levelH = 0.8, firstLevelH = 0.4, levelTranslateIncrement = 2, levels = 2, drawFakeKey = false, bevel = false);
