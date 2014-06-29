@@ -217,7 +217,7 @@ module consonantsKeyboard(keys = 5, numberKeyIndex = 2, rightWideKeyIndex = 0, l
       for (i = [0 : 1]) for (j = [0 : 1]) translate([5 + (25 + hKeyDistance * (keys - 1)) * i, 7 + (65) * j, -1]) cylinder(r = 3.5 / 2, h=50, $fn = 12);
       for (i = [0 : 1]) for (j = [0 : 1]) translate([5 + (25 + hKeyDistance * (keys - 1)) * i, 7 + (65) * j, 2]) cylinder(r = 7 / 2, h=50, $fn = 12);
     }
-    dustCover();
+    scale([1, 1, 2]) dustCover();
   }
 }
 
@@ -348,17 +348,19 @@ module dustCover() {
   }
   translate([-hKeyDistance * 2, 0, 0]) difference() {
     verticalDustCover();
-    translate([44.6, -39.5, 0.15]) cube([3.5, 51, 0.6], center = true);
+    translate([44.4, -39.5, 0.15]) cube([3.5, 50, 0.6], center = true);
   }
   translate([-hKeyDistance, 0, 0]) verticalDustCover();
   difference() {
     verticalDustCover();
-    translate([44.75, -36.5, 0.15]) cube([15, 10, 0.6], center = true);
+    translate([45.75, -36.5, 0.15]) cube([15, 10, 0.6], center = true);
+    // LED hole
+    //translate([45.75, -48, 0.15]) cube([1, 10, 0.6], center = true);
   }
   translate([hKeyDistance, 0, 0]) verticalDustCover();
   translate([hKeyDistance * 2, 0, 0]) difference() {
     verticalDustCover();
-    translate([46.9, -39.5, 0.15]) cube([3.5, 51, 0.6], center = true);
+    translate([47.2, -39.5, 0.15]) cube([3.5, 50, 0.6], center = true);
   }
   translate([hKeyDistance * 3, 0, 0]) difference() {
     verticalDustCover();
@@ -367,13 +369,13 @@ module dustCover() {
 }
 
 module verticalDustCover() {
-  translate([45.75, -33, 0.15]) cube([3.5, 70, 0.3], center = true);
-  translate([45.75, -65, 0.15]) cube([4.75, 6, 0.3], center = true);
-  translate([45.75, -4, 0.15]) cube([4.75, 21, 0.3], center = true);
+  translate([45.75, -33, 0.15]) cube([4.5, 70, 0.3], center = true);
+  translate([45.75, -65, 0.15]) cube([5.5, 6, 0.3], center = true);
+  translate([45.75, -4, 0.15]) cube([5.5, 21, 0.3], center = true);
 }
 
 module horizontalDustCover() {
-  translate([45.75, -41.25, 0.15]) cube([120, 1.25, 0.3], center = true);
+  translate([45.75, -41.25, 0.15]) cube([120, 1.75, 0.3], center = true);
 }
 
 module rightBaseBridgeTest() {
