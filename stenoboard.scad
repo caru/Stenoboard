@@ -217,6 +217,7 @@ module consonantsKeyboard(keys = 5, numberKeyIndex = 2, rightWideKeyIndex = 0, l
       for (i = [0 : 1]) for (j = [0 : 1]) translate([5 + (25 + hKeyDistance * (keys - 1)) * i, 7 + (65) * j, -1]) cylinder(r = 3.5 / 2, h=50, $fn = 12);
       for (i = [0 : 1]) for (j = [0 : 1]) translate([5 + (25 + hKeyDistance * (keys - 1)) * i, 7 + (65) * j, 2]) cylinder(r = 7 / 2, h=50, $fn = 12);
     }
+    dustCover();
   }
 }
 
@@ -337,6 +338,42 @@ module base(keys = 6, baseH = 1.2, baseFrameH = mainRightScrewH + screwFrameVert
     }
     for(i = [0:3]) translate(frameScrewPositions[i] + [0, 0, -1]) cylinder(r = frameScrewD / 2, h = 100);
   }
+}
+
+module dustCover() {
+  horizontalDustCover();
+  translate([-hKeyDistance * 3, 0, 0]) difference() {
+    verticalDustCover();
+    translate([43.75, -39.5, 0.15]) cube([3.5, 100, 0.6], center = true);
+  }
+  translate([-hKeyDistance * 2, 0, 0]) difference() {
+    verticalDustCover();
+    translate([44.6, -39.5, 0.15]) cube([3.5, 51, 0.6], center = true);
+  }
+  translate([-hKeyDistance, 0, 0]) verticalDustCover();
+  difference() {
+    verticalDustCover();
+    translate([44.75, -36.5, 0.15]) cube([15, 10, 0.6], center = true);
+  }
+  translate([hKeyDistance, 0, 0]) verticalDustCover();
+  translate([hKeyDistance * 2, 0, 0]) difference() {
+    verticalDustCover();
+    translate([46.9, -39.5, 0.15]) cube([3.5, 51, 0.6], center = true);
+  }
+  translate([hKeyDistance * 3, 0, 0]) difference() {
+    verticalDustCover();
+    translate([47.75, -39.5, 0.15]) cube([3.5, 100, 0.6], center = true);
+  }
+}
+
+module verticalDustCover() {
+  translate([45.75, -33, 0.15]) cube([3.5, 70, 0.3], center = true);
+  translate([45.75, -65, 0.15]) cube([4.75, 6, 0.3], center = true);
+  translate([45.75, -4, 0.15]) cube([4.75, 21, 0.3], center = true);
+}
+
+module horizontalDustCover() {
+  translate([45.75, -41.25, 0.15]) cube([120, 1.25, 0.3], center = true);
 }
 
 module rightBaseBridgeTest() {
