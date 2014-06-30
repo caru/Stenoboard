@@ -250,18 +250,28 @@ module screwHole(id, od, h, topOd, coneH, bevel = [false, false, false, false], 
 }
 
 module vowelsFrame(baseH = -1, frameH = 4, isKeyboard = false) {
-  difference() {
-    union() {
-      translate([3, 7.5, 0]) beveledCube([40, 36, frameH], center = false, bevelR = 4);
-      //translate([-1, 40, 0]) beveledCube([48, 1.5, frameH], center = false, bevelR = 1);
-      translate([-0.5, 37.5, 0]) beveledCube([47, 8 + (isKeyboard ? 1 : 0), frameH], center = false, bevelR = 0);
+  union() {
+    difference() {
+      union() {
+        translate([3, 7.5, 0]) beveledCube([40, 36, frameH], center = false, bevelR = 4, bevelSegments = 20);
+        //translate([-1, 40, 0]) beveledCube([48, 1.5, frameH], center = false, bevelR = 1);
+        translate([-0.5, 37.5, 0]) beveledCube([47, 8 + (isKeyboard ? 1 : 0), frameH], center = false, bevelR = 0);
+      }
+      translate([0, 8, 0]) if (isKeyboard) translate([7, -4, baseH]) beveledCube([32, 41 - (isKeyboard ? 2 : 0), rightVowelsScrewH * 2], center = false);
+      else {
+        translate([7, 2, baseH]) beveledCube([32, 50, rightVowelsScrewH * 2], center = false);
+        translate([1 + 0.01, -1, frameH +0.01]) scale([1, 1.2, 1]) rotate([0, 0, 90]) rotate([-90,0,0]) bevel(r = 10, length = 100, segments = 40);
+      }
+      if (isKeyboard) translate([-20, -10, -1]) cube([100,50.5,100]);
     }
-    translate([0, 8, 0]) if (isKeyboard) translate([7, -4, baseH]) beveledCube([32, 41 - (isKeyboard ? 2 : 0), rightVowelsScrewH * 2], center = false);
-    else {
-      translate([7, 2, baseH]) beveledCube([32, 50, rightVowelsScrewH * 2], center = false);
-      translate([1 + 0.01, -1, frameH +0.01]) scale([1, 1.2, 1]) rotate([0, 0, 90]) rotate([-90,0,0]) bevel(r = 10, length = 100, segments = 15);
+    if (!isKeyboard) difference() {
+      union() {
+        translate([17 + 6 + 0.01, 7.75, frameH +0.01-0.6]) scale([1, 1.2, 1]) rotate([0, 0, 90]) rotate([-90,0,0]) bevel(r = 10, length = 32.25, segments = 40);
+        translate([6.75 + 0.01, 7.75, frameH +0.01-0.6]) scale([1, 1.2, 1]) cube([32.25,10,0.6]);
+      }
+      translate([1 + 0.01, 7, frameH +0.01]) scale([1, 1.2, 1]) rotate([0, 0, 90]) rotate([-90,0,0]) bevel(r = 10, length = 100, segments = 40);
+      translate([6.75 + 0.01, 13.5, frameH +0.01-0.6-20]) scale([1, 1.2, 1]) cube([32.25,10,50]);
     }
-    if (isKeyboard) translate([-20, -10, -1]) cube([100,50.5,100]);
   }
 }
 
@@ -322,8 +332,8 @@ module base(keys = 6, baseH = 1.2, baseFrameH = mainRightScrewH + screwFrameVert
         translate(framePosition) frame(keys, differenceH = baseH, holeIncrease = [2, 7], frameH = baseFrameH, cutTopFrame = 0);
         translate(framePosition) translate([9 - 0 / 2 + (isRight ? 0 : 64), 2, baseH + 4]) beveledCube([46, 50, baseFrameH * 2], center = false);
         if(isRight) translate([-40, -27, -1]) cube([55,26,23]);
-        if(isRight) translate([-6, 10, baseFrameH]) rotate([0, 0, -90]) rotate([0, 90, 0]) cylinder(r=3.75, h = 30, center = true);
-        else translate([97.3, -10, baseFrameH]) rotate([0, 0, 90]) rotate([0, 90, 0]) cylinder(r=3.75, h = 50, center = true);
+        if(isRight) translate([-6, 10, baseFrameH]) rotate([0, 0, -90]) rotate([0, 90, 0]) cylinder(r=3.75, h = 30, center = true, $fn=100);
+        else translate([97.3, -10, baseFrameH]) rotate([0, 0, 90]) rotate([0, 90, 0]) cylinder(r=3.75, h = 50, center = true, $fn=100);
         translate([-1.5 + 0.01 + (isRight ? 0 : leftVowelsOffset), -85, baseH]) cube([32 - 0.02,25,50]);
       }
       translate([5,3,12.5]) cube([15,7.2,25], center=true);
