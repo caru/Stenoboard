@@ -53,7 +53,7 @@ arduinoScrewOffset = [-17.5, 45, 0];
 arduinoScrewH = 6;
 arduinoScrewD = 3;
 rightVowelsBasePosition = [-8.5, -107, 0];
-rightVowelsBaseScrewD = 3.5;
+rightVowelsBaseScrewD = 3.3;
 %translate(boardCenter) cylinder(r=1,h=10,$fn=6);
 %translate(rightRReference) cylinder(r=1,h=10,$fn=6);
 %translate(rightEReference + [0, 0, 30]) cylinder(r=1,h=10,$fn=6);
@@ -73,10 +73,11 @@ rightVowelsBaseScrewD = 3.5;
 //rightBaseBridgeTest();
 //translate([-45.73, 50, 0]) base();
 //translate([0, 130, 0])
-translate([-45.73, 50, 0]) base(isRight = false);
+//translate([-45.73, 50, 0]) base(isRight = false);
 //translate([0, 0, rightVowelsScrewH + screwFrameVerticalOffset + 0.2])
 //translate([-14.5, 75, 0]) vowelsKeyboard();
 //translate([-45.73, 50, 0]) cover();
+rightAssembly();
 
 // MODULES
 
@@ -260,17 +261,17 @@ module vowelsFrame(baseH = -1, frameH = 4, isKeyboard = false) {
       translate([0, 8, 0]) if (isKeyboard) translate([7, -4, baseH]) beveledCube([32, 41 - (isKeyboard ? 2 : 0), rightVowelsScrewH * 2], center = false);
       else {
         translate([7, 2, baseH]) beveledCube([32, 50, rightVowelsScrewH * 2], center = false);
-        translate([1 + 0.01, -1, frameH +0.01]) scale([1, 1.2, 1]) rotate([0, 0, 90]) rotate([-90,0,0]) bevel(r = 10, length = 100, segments = 40);
+        translate([1 + 0.01, -1, frameH +0.01]) scale([1, 0.7, 1]) rotate([0, 0, 90]) rotate([-90,0,0]) bevel(r = 10, length = 100, segments = 40);
       }
       if (isKeyboard) translate([-20, -10, -1]) cube([100,50.5,100]);
     }
     if (!isKeyboard) difference() {
       union() {
-        translate([17 + 6 + 0.01, 7.75, frameH +0.01-0.6]) scale([1, 1.2, 1]) rotate([0, 0, 90]) rotate([-90,0,0]) bevel(r = 10, length = 32.25, segments = 40);
-        translate([6.75 + 0.01, 7.75, frameH +0.01-0.6]) scale([1, 1.2, 1]) cube([32.25,10,0.6]);
+        translate([17 + 6 + 0.01, 7.75, frameH +0.01-1.2]) scale([1, 0.7, 1]) rotate([0, 0, 90]) rotate([-90,0,0]) bevel(r = 10, length = 32.25, segments = 40);
+        translate([6.75 + 0.01, 7.75, frameH +0.01-1.2]) scale([1, 0.7, 1]) cube([32.25,10,1.2]);
       }
-      translate([1 + 0.01, 7, frameH +0.01]) scale([1, 1.2, 1]) rotate([0, 0, 90]) rotate([-90,0,0]) bevel(r = 10, length = 100, segments = 40);
-      translate([6.75 + 0.01, 13.5, frameH +0.01-0.6-20]) scale([1, 1.2, 1]) cube([32.25,10,50]);
+      translate([1 + 0.01, 7, frameH +0.01]) scale([1, 0.7, 1]) rotate([0, 0, 90]) rotate([-90,0,0]) bevel(r = 10, length = 100, segments = 40);
+      translate([6.75 + 0.01, 13.5, frameH +0.01-1.2-20]) cube([32.25,10,50]);
     }
   }
 }
@@ -422,5 +423,16 @@ module cover(keys = 6, baseH = 0.6, lowScrewH = 1.2 + 2, highScrewH = 1.2 + 2 + 
       translate(frameScrewPositions[2]) cylinder(r1=screwHolderR1 , r2=screwHolderR2, h = baseH + highScrewH);
       translate(frameScrewPositions[3]) cylinder(r1=screwHolderR1 , r2=screwHolderR2, h = baseH + highScrewH);
     }
+  }
+}
+
+module rightAssembly() {
+  translate([-45.73, 50, 0]) union() {
+    color("white") translate([0, 0, 27.9]) consonantsKeyboard(keys = 6, numberKeyIndex = 3, rightWideKeyIndex = 0, leftWideKeyIndex = 5, drawTopRow = true, drawBottomRow = true, drawFrame = true);
+    color("white") translate([0, 0, 0]) translate([0, 0, 2+27.9]) barKeyboard();
+    color("green") translate([44.35, -39.75, 27.9]) barButtonContact();
+    color("red") base();
+    //translate([-45.73, 50, 0]) base(isRight = false);
+    color("white") translate([0, 0, 18.6]) vowelsKeyboard();
   }
 }
