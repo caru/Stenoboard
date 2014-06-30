@@ -244,7 +244,7 @@ module screwHole(id, od, h, topOd, coneH, bevel = [false, false, false, false], 
     union() {
       cylinder(r = od / 2, h = h - coneH);
       translate([0,0,h-coneH]) cylinder(r1 = od / 2, r2 = topOd/2, h= coneH);
-      for(i = [0 : 3]) if(bevel[i]) rotate([0, 0, 45 + i * 90]) translate([od / 2- 0.5, 0, 0]) rotate([90,0,0]) bevel(r = h * 0.9, length = 1, segments = 5);
+      for(i = [0 : 3]) if(bevel[i]) rotate([0, 0, 45 + i * 90]) translate([od / 2- 0.5, 0, 0]) rotate([90,0,0]) bevel(r = h * 0.9, length = 2.5, segments = 5);
     }
     translate([0, 0, holeStartH]) cylinder(r = id / 2, h = h*3);
   }
