@@ -71,13 +71,13 @@ rightVowelsBaseScrewD = 3.3;
 //translate([-46, 10, 0]) translate([0, 0, 2]) barKeyboard();
 //barButtonContact();
 //rightBaseBridgeTest();
-//translate([-45.73, 50, 0]) base();
+translate([-45.73, 50, 0]) base();
 //translate([0, 130, 0])
 //translate([-45.73, 50, 0]) base(isRight = false);
 //translate([0, 0, rightVowelsScrewH + screwFrameVerticalOffset + 0.2])
 //translate([-14.5, 75, 0]) vowelsKeyboard();
 //translate([-45.73, 50, 0]) cover();
-rightAssembly();
+//rightAssembly();
 
 // MODULES
 
@@ -260,7 +260,8 @@ module vowelsFrame(baseH = -1, frameH = 4, isKeyboard = false) {
       }
       translate([0, 8, 0]) if (isKeyboard) translate([7, -4, baseH]) beveledCube([32, 41 - (isKeyboard ? 2 : 0), rightVowelsScrewH * 2], center = false);
       else {
-        translate([7, 2, baseH]) beveledCube([32, 50, rightVowelsScrewH * 2], center = false);
+        translate([7, 2, baseH]) beveledCube([32, 31, rightVowelsScrewH * 2], center = false);
+        translate([8, 2, baseH]) cube([30, 61, rightVowelsScrewH * 2], center = false);
         translate([1 + 0.01, -1, frameH +0.01]) scale([1, 0.7, 1]) rotate([0, 0, 90]) rotate([-90,0,0]) bevel(r = 10, length = 100, segments = 40);
       }
       if (isKeyboard) translate([-20, -10, -1]) cube([100,50.5,100]);
@@ -280,7 +281,7 @@ module vowelsBase(baseH) {
   union() {
     translate(rightVowelsBasePosition) difference() {
       vowelsFrame(baseH = baseH, frameH = rightVowelsScrewH + screwFrameVerticalOffset);
-      for(i = [0, 1]) for(j = [1]) translate([4 + 38 * i, 6 + 37 * j, -1]) cylinder(r=rightVowelsScrewD / 2, h = 100);
+      for(i = [0, 1]) for(j = [1]) translate([4 + 38 * i, 6 + 37 * j, -1]) cylinder(r=rightVowelsBaseScrewD / 2, h = 100);
     }
     for(i = [0:1]) translate(rightEReference + rightVowelsScrewPositions[i]) {
       screwHole(rightVowelsScrewD, rightVowelsScrewD + 2.5, rightVowelsScrewH - 1, rightVowelsScrewD + 2, rightVowelsScrewD + 1, rightVowelsScrewBevels[i], rightVowelsScrewH - 12);
