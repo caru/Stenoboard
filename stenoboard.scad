@@ -268,8 +268,8 @@ module vowelsFrame(baseH = -1, frameH = 4, isKeyboard = false) {
     }
     if (!isKeyboard) difference() {
       union() {
-        translate([17 + 6 + 0.01, 7.75, frameH +0.01-1.2]) scale([1, 0.7, 1]) rotate([0, 0, 90]) rotate([-90,0,0]) bevel(r = 10, length = 32.25, segments = 40);
-        translate([6.75 + 0.01, 7.75, frameH +0.01-1.2]) scale([1, 0.7, 1]) cube([32.25,10,1.2]);
+        translate([17 + 6 + 0.01, 7.75, frameH +0.01-2.1]) scale([1, 0.7, 1]) rotate([0, 0, 90]) rotate([-90,0,0]) bevel(r = 10, length = 32.25, segments = 40);
+        translate([6.75 + 0.01, 7.75, frameH +0.01-2.1]) scale([1, 0.7, 1]) cube([32.25,10,2.1]);
       }
       translate([1 + 0.01, 7, frameH +0.01]) scale([1, 0.7, 1]) rotate([0, 0, 90]) rotate([-90,0,0]) bevel(r = 10, length = 100, segments = 40);
       translate([6.75 + 0.01, 13.5, frameH +0.01-1.2-20]) cube([32.25,10,50]);
