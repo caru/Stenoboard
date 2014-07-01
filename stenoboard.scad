@@ -72,13 +72,13 @@ rightVowelsBaseScrewD = 3.3;
 //barButtonContact();
 //rightBaseBridgeTest();
 //translate([-45.73, 50, 0]) 
-base();
+//base();
 //translate([0, 130, 0])
 //translate([-45.73, 50, 0]) base(isRight = false);
 //translate([0, 0, rightVowelsScrewH + screwFrameVerticalOffset + 0.2])
 //translate([-14.5, 75, 0]) vowelsKeyboard();
 //translate([-45.73, 50, 0]) cover();
-//rightAssembly(drawConsonants = false, drawNumbers = false);
+rightAssembly(drawConsonants = false, drawNumbers = false);
 
 // MODULES
 
@@ -330,6 +330,8 @@ module vowelsKeyboard() {
   difference() {
     translate(rightVowelsBasePosition + [8 +  15, 13.2 + 15, 0.3]) beveledCube([31.25, 28.75, 0.6], center = true, bevelY = [true, true], bevelR = 1.5);
     translate(rightVowelsBasePosition + [8 +  15, 13.2 + 15, 0]) cube([0.4, 28.75, 10], center = true);
+    translate(rightVowelsBasePosition + [6.56, 41.5, 0]) cylinder(h = 10, r = 2, center = true, $fn = 24);
+    translate(rightVowelsBasePosition + [(23 - 6.56) + 23, 41.5, 0]) cylinder(h = 10, r = 2, center = true, $fn = 24);
   }
  }
 }
