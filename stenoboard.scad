@@ -71,13 +71,14 @@ rightVowelsBaseScrewD = 3.3;
 //translate([-46, 10, 0]) translate([0, 0, 2]) barKeyboard();
 //barButtonContact();
 //rightBaseBridgeTest();
-translate([-45.73, 50, 0]) base();
+//translate([-45.73, 50, 0]) 
+base();
 //translate([0, 130, 0])
 //translate([-45.73, 50, 0]) base(isRight = false);
 //translate([0, 0, rightVowelsScrewH + screwFrameVerticalOffset + 0.2])
 //translate([-14.5, 75, 0]) vowelsKeyboard();
 //translate([-45.73, 50, 0]) cover();
-//rightAssembly();
+//rightAssembly(drawConsonants = false, drawNumbers = false);
 
 // MODULES
 
@@ -272,7 +273,7 @@ module vowelsFrame(baseH = -1, frameH = 4, isKeyboard = false) {
         translate([6.75 + 0.01, 7.75, frameH +0.01-2.1]) scale([1, 0.7, 1]) cube([32.25,10,2.1]);
       }
       translate([1 + 0.01, 7, frameH +0.01]) scale([1, 0.7, 1]) rotate([0, 0, 90]) rotate([-90,0,0]) bevel(r = 10, length = 100, segments = 40);
-      translate([6.75 + 0.01, 13.5, frameH +0.01-1.2-20]) cube([32.25,10,50]);
+      translate([6.85, 13.5, frameH +0.01-1.2-20]) beveledCube([32.3,10,50]);
     }
   }
 }
@@ -295,6 +296,7 @@ module vowelsBase(baseH) {
 }
 
 module vowelsKeyboard() {
+ union() {
   difference() {
     union() {
       translate(rightVowelsBasePosition) vowelsFrame(isKeyboard = true);
@@ -325,6 +327,11 @@ module vowelsKeyboard() {
       translate([2 + 46, 39, -1]) cylinder(r = 4, h = 10);
     }
   }
+  difference() {
+    translate(rightVowelsBasePosition + [8 +  15, 13.2 + 15, 0.3]) beveledCube([31.25, 28.75, 0.6], center = true, bevelY = [true, true], bevelR = 1.5);
+    translate(rightVowelsBasePosition + [8 +  15, 13.2 + 15, 0]) cube([0.4, 28.75, 10], center = true);
+  }
+ }
 }
 
 module base(keys = 6, baseH = 1.2, baseFrameH = mainRightScrewH + screwFrameVerticalOffset, isRight = true, drawVowels = true) {
@@ -427,10 +434,10 @@ module cover(keys = 6, baseH = 0.6, lowScrewH = 1.2 + 2, highScrewH = 1.2 + 2 + 
   }
 }
 
-module rightAssembly() {
+module rightAssembly(drawConsonants = true, drawNumbers = true) {
   translate([-45.73, 50, 0]) union() {
-    color("white") translate([0, 0, 27.9]) consonantsKeyboard(keys = 6, numberKeyIndex = 3, rightWideKeyIndex = 0, leftWideKeyIndex = 5, drawTopRow = true, drawBottomRow = true, drawFrame = true);
-    color("white") translate([0, 0, 0]) translate([0, 0, 2+27.9]) barKeyboard();
+    if (drawConsonants) color("white") translate([0, 0, 27.9]) consonantsKeyboard(keys = 6, numberKeyIndex = 3, rightWideKeyIndex = 0, leftWideKeyIndex = 5, drawTopRow = true, drawBottomRow = true, drawFrame = true);
+    if (drawNumbers) color("white") translate([0, 0, 0]) translate([0, 0, 2+27.9]) barKeyboard();
     color("green") translate([44.35, -39.75, 27.9]) barButtonContact();
     color("red") base();
     //translate([-45.73, 50, 0]) base(isRight = false);
