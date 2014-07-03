@@ -373,7 +373,7 @@ module dustCover() {
     
     for (i = [-2 : 3]) translate([-6.85 + (- 1 + hKeyDistance * 6 - 3.8) / 2 - hKeyDistance / 2 + 0.1 + i * hKeyDistance, -79, 0]) beveledCube([12.8, 29.25, 10], center = true, bevelR = 1);
 
-    translate([45.75 - 1.5 - 0.6, -40.5, -5]) scale([1.4, 2, 10]) barButtonContact();
+    translate([45.75 - 1.5 - 0.6, -41, -5]) scale([1.4, 1.8, 10]) barButtonContact();
   }
 }
 
@@ -382,10 +382,6 @@ module rightBaseBridgeTest() {
     base(drawVowels = true);
     translate([-20,-37, 18]) cube([12, 47, 7]);
   }
-}
-
-module crossDustCover() {
-  for(i = [0 : 1]) for(j = [0 : 1]) mirror([i, 0, 0]) mirror([0, j, 0]) translate([2.2, 0.8, 0]) bevel(r = 2.5, length = 0.3, segments = 10, minThickness = 0);
 }
 
 // This is meant to serve as a cheap shipping cover, to protect the keys
