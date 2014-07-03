@@ -377,53 +377,6 @@ module dustCover() {
   }
 }
 
-module dustCover2() {
-  horizontalDustCover();
-  translate([-hKeyDistance * 3, 0, 0]) difference() {
-    verticalDustCover();
-    translate([43.75, -39.5, 0.15]) cube([3.5, 100, 0.6], center = true);
-  }
-  translate([-hKeyDistance * 2, 0, 0]) difference() {
-    verticalDustCover();
-    difference() {
-      translate([39.2, -34.65, 0.15]) beveledCube([13.5, 40, 0.6], center = true, bevelR = 2.5);
-      translate([48.25, -41.25, 0.15]) crossDustCover();
-    }
-    translate([39.2, -55.5, 0.15]) beveledCube([13.5, 20, 0.6], center = true, bevelR = 6);
-  }
-  translate([-hKeyDistance, 0, 0]) verticalDustCover();
-  difference() {
-    verticalDustCover();
-    translate([45.75, -36.5, 0.15]) cube([15, 10, 0.6], center = true);
-    // LED hole
-    //translate([45.75, -48, 0.15]) cube([1, 10, 0.6], center = true);
-  }
-  translate([hKeyDistance, 0, 0]) verticalDustCover();
-  translate([hKeyDistance * 2, 0, 0]) difference() {
-    verticalDustCover();
-    difference() {
-      translate([52.4, -34.65, 0.15]) beveledCube([13.5, 40, 0.6], center = true, bevelR = 2.5);
-      translate([43.4, -41.25, 0.15]) crossDustCover();
-    }
-    translate([52.4, -55.5, 0.15]) beveledCube([13.5, 20, 0.6], center = true, bevelR = 6);
-  }
-  translate([hKeyDistance * 3, 0, 0]) difference() {
-    verticalDustCover();
-    translate([47.75, -39.5, 0.15]) cube([3.5, 100, 0.6], center = true);
-  }
-}
-
-module verticalDustCover() {
-  translate([45.75, -33, 0.15]) cube([4.5, 70, 0.3], center = true);
-  translate([45.75, -65, 0.15]) cube([5.5, 7, 0.3], center = true);
-  translate([45.75, -4, 0.15]) cube([5.5, 23.5, 0.3], center = true);
-  translate([45.75, -41.25, 0.15]) crossDustCover();
-}
-
-module horizontalDustCover() {
-  translate([45.75, -41.25, 0.15]) cube([120, 1.75, 0.3], center = true);
-}
-
 module rightBaseBridgeTest() {
   intersection() {
     base(drawVowels = true);
