@@ -24,8 +24,10 @@ hKeyDistance = 18.325;
 vowelsKeyDistance = 14.5;
 framePosition = [-17.75, -69.5, 0];
 drawKeySupport = false;
+drawKeySurfaceTopBevel = true;
 drawKeySurfaceDifference = true;
 keySurfaceDifferenceFn = 256;
+scaleKeyTopBevel = 1.4;
 
 boardCenter = [46,-41.25,0];
 rightRReference = boardCenter + [-hKeyDistance * 1.5, -22, 0];
@@ -37,23 +39,23 @@ screw2 = [-12.75, 2.5, 0];
 screw3 = [-12.75, -62.5, 0];
 screw4 = [103.9, -62.5, 0];
 frameScrewPositions = [screw1, screw2, screw3, screw4];
-frameScrewD = 3.2;
+frameScrewD = 3.0;
 mainRightScrewPositions = [[-37.465,11.43,0], [40.64,13.97,0], [-34.29,-10.795,0], [34.925,-10.795,0]];
 mainRightScrewBevels = [[false, false, true, false], [true, false, false, true], [false, true, true, true], [true, false, true, true]];
-mainRightScrewH = 19.2;
-mainRightScrewD = 3.1;
+mainRightScrewH = 20.1;
+mainRightScrewD = 3.0;
 mainLeftScrewPositions = [[-16.51,12.065,0], [40.005,13.335,0], [-34.29,-10.795,0], [36.83,-11.43,0]];
 mainLeftScrewBevels = [[true, true, true, true], [true, true, true, true], [true, true, true, true], [true, true, true, true]];
 rightVowelsScrewPositions = [[-1.27,9.525,0], [16.51,9.525,0], [7.62,-9.525,0]];
 rightVowelsScrewBevels = [[true, true, true, true], [true, true, true, true], [true, true, false, false]];
 rightVowelsScrewH = mainRightScrewH - 9.3;
-rightVowelsScrewD = 3.1;
+rightVowelsScrewD = 3.0;
 arduinoScrewPositions = [[0, 0, 0], [50.8, -15.2, 0], [50.8, -15.2 - 27.9, 0], [-1.3, -15.2 -27.9 -5.1, 0]];
 arduinoScrewOffset = [-17.5, 45, 0];
 arduinoScrewH = 6;
 arduinoScrewD = 3;
 rightVowelsBasePosition = [-8.5, -107, 0];
-rightVowelsBaseScrewD = 3.1;
+rightVowelsBaseScrewD = 3.0;
 %translate(boardCenter) cylinder(r=1,h=10,$fn=6);
 %translate(rightRReference) cylinder(r=1,h=10,$fn=6);
 %translate(rightEReference + [0, 0, 30]) cylinder(r=1,h=10,$fn=6);
@@ -68,7 +70,10 @@ rightVowelsBaseScrewD = 3.1;
 
 
 //translate([-46, 35, 0]) consonantsKeyboard(keys = 6, numberKeyIndex = 3, rightWideKeyIndex = 0, leftWideKeyIndex = 5, drawTopRow = true, drawBottomRow = true, drawFrame = true);
-translate([-46, 10, 0]) translate([0, 0, 2]) barKeyboard();
+//color("gray") 
+//translate([-46, 35, 0]) translate([0,0,2])
+translate([-46, 10, 0]) 
+barKeyboard();
 //barButtonContact();
 //rightBaseBridgeTest();
 //translate([-45.73, 50, 0]) base();
@@ -79,6 +84,8 @@ translate([-46, 10, 0]) translate([0, 0, 2]) barKeyboard();
 //translate([-14.5, 24, 0]) vowelsKeyboard();
 //translate([-45.73, 50, 0]) cover();
 //rightAssembly(drawConsonants = true, drawNumbers = true);
+
+
 
 // MODULES
 
@@ -97,6 +104,26 @@ module beveledCube(cubeEdges, center = false, bevelR = 2, bevelSegments = 10, be
   }
 }
 
+module advancedBeveledCube(cubeEdges, center = false, bevelR = 2, bevelSegments = 10, bevelX = [true, true], bevelY = [true, true], topBevels = [true, true, true, true], topBevelR = 0.8, topBevelSegments = 4, scaleTopBevel = 1) {
+  difference() {
+    beveledCube(cubeEdges = cubeEdges, center = center, bevelR = bevelR, bevelSegments = bevelSegments, bevelX = bevelX, bevelY = bevelY);
+    // Top bevels
+    if(topBevels[2]) translate([center ? -cubeEdges[0] / 2 : 0, 0, cubeEdges[2] / (center ? 2 : 1)]) rotate([-90, 0, 0]) scale([1, scaleTopBevel, 1]) bevel(r = topBevelR, length = (cubeEdges[0] + cubeEdges[1]) * 3, segments = topBevelSegments, minThickness = 0);
+    if(topBevels[0]) translate([center ? cubeEdges[0] / 2 : cubeEdges[0], 0, cubeEdges[2] / (center ? 2 : 1)]) rotate([0, 0, 180]) rotate([-90, 0, 0]) scale([1, scaleTopBevel, 1]) bevel(r = topBevelR, length = (cubeEdges[0] + cubeEdges[1]) * 3, segments = topBevelSegments, minThickness = 0);
+    if(topBevels[3])  translate([0, (center ? -cubeEdges[1] / 2 : 0), cubeEdges[2] / (center ? 2 : 1)]) rotate([0, 90, 0]) scale([scaleTopBevel, 1, 1]) bevel(r = topBevelR, length = (cubeEdges[0] + cubeEdges[1]) * 3, segments = topBevelSegments, minThickness = 0);
+    if(topBevels[1]) translate([0, (center ? cubeEdges[1] / 2 : cubeEdges[1]), cubeEdges[2] / (center ? 2 : 1)]) rotate([0, 0, 180]) rotate([0, 90, 0]) scale([scaleTopBevel, 1, 1]) bevel(r = topBevelR, length = (cubeEdges[0] + cubeEdges[1]) * 3, segments = topBevelSegments, minThickness = 0);
+    // Top corner bevels
+    if(topBevels[0] && topBevels[1]) for(i = [0 : bevelSegments - 1]) translate([cubeEdges[0] / (center ? 2 : 1) - bevelR, cubeEdges[1] / (center ? 2 : 1) - bevelR, cubeEdges[2] / (center ? 2 : 1)]) rotate([0, 0, (90 / bevelSegments / 2) + i * (90 / bevelSegments)]) translate([bevelR, bevelR, 0]) scale([1, 1, scaleTopBevel]) cornerBevel(r = topBevelR, length = (cubeEdges[0] + cubeEdges[1]) * 3, segments = topBevelSegments, minThickness = 0);
+    if(topBevels[1] && topBevels[2]) translate([(!center ? cubeEdges[0] / 2 : 0), (!center ? cubeEdges[1] / 2 : 0), 0]) mirror([1, 0, 0]) for(i = [0 : bevelSegments - 1]) translate([cubeEdges[0] / 2 - bevelR, cubeEdges[1] / 2 - bevelR, cubeEdges[2] / (center ? 2 : 1)]) rotate([0, 0, (90 / bevelSegments / 2) + i * (90 / bevelSegments)]) translate([bevelR, bevelR, 0]) scale([1, 1, scaleTopBevel]) cornerBevel(r = topBevelR, length = (cubeEdges[0] + cubeEdges[1]) * 3, segments = topBevelSegments, minThickness = 0);
+    if(topBevels[2] && topBevels[3]) translate([(!center ? cubeEdges[0] / 2 : 0), (!center ? cubeEdges[1] / 2 : 0), 0]) mirror([1, 0, 0])  mirror([0, 1, 0]) for(i = [0 : bevelSegments - 1]) translate([cubeEdges[0] / 2 - bevelR, cubeEdges[1] / 2 - bevelR, cubeEdges[2] / (center ? 2 : 1)]) rotate([0, 0, (90 / bevelSegments / 2) + i * (90 / bevelSegments)]) translate([bevelR, bevelR, 0]) scale([1, 1, scaleTopBevel]) cornerBevel(r = topBevelR, length = (cubeEdges[0] + cubeEdges[1]) * 3, segments = topBevelSegments, minThickness = 0);
+    if(topBevels[0] && topBevels[3]) translate([(!center ? cubeEdges[0] / 2 : 0), (!center ? cubeEdges[1] / 2 : 0), 0]) mirror([0, 1, 0])  for(i = [0 : bevelSegments - 1]) translate([cubeEdges[0] / 2 - bevelR, cubeEdges[1] / 2 - bevelR, cubeEdges[2] / (center ? 2 : 1)]) rotate([0, 0, (90 / bevelSegments / 2) + i * (90 / bevelSegments)]) translate([bevelR, bevelR, 0]) scale([1, 1, scaleTopBevel]) cornerBevel(r = topBevelR, length = (cubeEdges[0] + cubeEdges[1]) * 3, segments = topBevelSegments, minThickness = 0);
+  }
+}
+
+module cornerBevel(r = 2, length = 100, segments = 10, minThickness = 0) {
+  #rotate([0, 0, 180]) rotate([-90, 0, 0]) bevel(r = r, length = length, segments = segments, minThickness = minThickness);
+}
+
 module bevel(r = 2, length = 100, segments = 10, minThickness = 0) {
   difference() {
     cube([(r + minThickness) * 2, (r + minThickness) * 2, length], center = true);
@@ -105,16 +132,20 @@ module bevel(r = 2, length = 100, segments = 10, minThickness = 0) {
   }
 }
 
-module topRowKeySurface(keyW = 13, keyD = 25, keyH = 1.25, drawDifference = true, isRightWideKey = false, isLeftWideKey = false, drawDifference = true) {
+module topRowKeySurface(keyW = 13, keyD = 25, keyH = 1.25, drawDifference = true, isRightWideKey = false, isLeftWideKey = false, drawDifference = true, isNearNumberSwitchKey = [false, false]) {
   difference() {
-    translate([-keyW / 2 + (isLeftWideKey ? -2.5 : 0), -keyD / 2, 0]) beveledCube([keyW + (isLeftWideKey ? 2.5 : 0) + (isRightWideKey ? 2.5 : 0), keyD, keyH]);
+    translate([-keyW / 2 + (isLeftWideKey ? -2.4 : 0) + (isNearNumberSwitchKey[1] ? 1 : 0), -keyD / 2, 0]) advancedBeveledCube([keyW + (isLeftWideKey ? 2.4 : 0) + (isRightWideKey ? 2.4 : 0) - (isNearNumberSwitchKey[0] ? 1 : 0) - (isNearNumberSwitchKey[1] ? 1 : 0), keyD, keyH], topBevels = [drawKeySurfaceTopBevel ? true : false, drawKeySurfaceTopBevel ? true : false, drawKeySurfaceTopBevel ? true : false, drawKeySurfaceTopBevel ? true : false], scaleTopBevel = scaleKeyTopBevel);
     if(drawKeySurfaceDifference && drawDifference) translate([0, 0, 29.5 + keyH]) rotate([90, 0, 0]) cylinder(r = 30, h = 50, center = true, $fn = keySurfaceDifferenceFn);
   }
 }
 
 module bottomRowKeySurface(keyW = 13, keyD = 25, keyH = 1.25, isRightWideKey = false, isLeftWideKey = false, drawDifference = true) {
   difference() {
-    translate([-keyW / 2 + (isLeftWideKey ? -2.5 : 0), -keyD / 2, 0]) beveledCube([keyW + (isLeftWideKey ? 2.5 : 0) + (isRightWideKey ? 2.5 : 0), keyD, keyH]);
+    //translate([-keyW / 2 + (isLeftWideKey ? -3.7 : 0), -keyD / 2, 0]) advancedBeveledCube([keyW + (isLeftWideKey ? 3.7 : 0) + (isRightWideKey ? 3.7 : 0), keyD, keyH]);
+    union() {
+      translate([-keyW / 2 + (isLeftWideKey ? -2.4 : 0), 0, 0]) advancedBeveledCube([keyW + (isLeftWideKey ? 2.4 : 0) + (isRightWideKey ? 2.4 : 0), keyD / 2, keyH], bevelY = [false, true], topBevels = [drawKeySurfaceTopBevel ? true : false, drawKeySurfaceTopBevel ? true : false, drawKeySurfaceTopBevel ? true : false, false], scaleTopBevel = scaleKeyTopBevel);
+      translate([-keyW / 2 + (isLeftWideKey ? -2.4 : 0), -keyD / 2, 0]) advancedBeveledCube([keyW + (isLeftWideKey ? 2.4 : 0) + (isRightWideKey ? 2.4 : 0), keyD / 2 + 2, keyH], bevelY = [true, false], topBevels = [drawKeySurfaceTopBevel ? true : false, false, drawKeySurfaceTopBevel ? true : false, drawKeySurfaceTopBevel ? true : false], bevelR = keyW / 2, bevelSegments = 24, scaleTopBevel = scaleKeyTopBevel);
+    }
     if(drawKeySurfaceDifference && drawDifference) {
       translate([0, 25 - (keyD / 2 - keyW / 2), 29.5 + keyH]) rotate([90, 0, 0]) cylinder(r = 30, h = 50, center = true, $fn = keySurfaceDifferenceFn);
       translate([0, -(keyD / 2 - keyW / 2), 29.49 + keyH]) rotate([90, 0, 0]) sphere(r = 30, $fn = keySurfaceDifferenceFn);
@@ -124,61 +155,67 @@ module bottomRowKeySurface(keyW = 13, keyD = 25, keyH = 1.25, isRightWideKey = f
 
 module numberBarSurface(keyW = 13, keyD = 25, keyH = 1.25, drawDifference = true, keys = 5, drawDifference = true) {
   rotate([0, 0, 180]) difference() {
-    translate([-keyW / 2 - hKeyDistance * (keys - 1), -keyD / 2, 0]) beveledCube([keyW + hKeyDistance * (keys - 1), keyD, keyH]);
+    translate([-keyW / 2 - hKeyDistance * (keys - 1) - 1.2, -keyD / 2, 0]) advancedBeveledCube([keyW + hKeyDistance * (keys - 1) + 2.4, keyD, keyH], topBevels = [drawKeySurfaceTopBevel ? true : false, drawKeySurfaceTopBevel ? true : false, drawKeySurfaceTopBevel ? true : false, drawKeySurfaceTopBevel ? true : false], scaleTopBevel = scaleKeyTopBevel);
     if(drawKeySurfaceDifference && drawDifference) {
       for (i = [0 : keys - 1]) translate([-i * hKeyDistance, -(keyD / 2 - keyW / 2) +1, 29.53 + keyH]) rotate([90, 0, 0]) sphere(r = 30, $fn = keySurfaceDifferenceFn);
     }
   }
 }
 
-module topRowKeyAssembly(pivotLength = 16.5, pivotHeight = 5, pivotDepth = 3.25, coneR1 = 2.5, coneH = 3, tolerancePerSide = 0.25, armWidth = 12, armLength = 40, armHeight = 1.5, topKeyW = 13, topKeyD = 25, topKeyH = 2, keySupportH = 0, verticalKeySupportH = 0, backlash = 0.0, isRightWideKey = false, isLeftWideKey = false) {
-  translate([0,1,0]) carvedArm(armL = armLength - 3, armW = armWidth, levelH = 0.4, firstLevelH = 0.8, levelTranslateIncrement = 2.5, levels = 2, drawFakeKey = false);
+module topRowKeyAssembly(pivotLength = 16.5, pivotHeight = 5, pivotDepth = 3.25, coneR1 = 2.5, coneH = 3, tolerancePerSide = 0.25, armWidth = 12, armLength = 40, armHeight = 1.5, topKeyW = 15.2, topKeyD = 26, topKeyH = 2, keySupportH = 0, verticalKeySupportH = 0, backlash = 0.0, isRightWideKey = false, isLeftWideKey = false, isNearNumberSwitchKey = [false, false]) {
+  translate([0,1,0]) carvedArm(armL = armLength - 3, armW = armWidth, levelH = 0.4, firstLevelH = 0.6, levelTranslateIncrement = 2.5, levels = 2, drawFakeKey = false);
   armHeight = 1 + 2 * 0.25;
-  translate([0, -armLength + topKeyD / 2, verticalKeySupportH + keySupportH]) topRowKeySurface(keyW = topKeyW, keyD = topKeyD, keyH = topKeyH, isRightWideKey = isRightWideKey, isLeftWideKey = isLeftWideKey);
+  translate([0, -armLength + topKeyD / 2 - 0.5, verticalKeySupportH + keySupportH]) topRowKeySurface(keyW = topKeyW, keyD = topKeyD, keyH = topKeyH, isRightWideKey = isRightWideKey, isLeftWideKey = isLeftWideKey, isNearNumberSwitchKey = isNearNumberSwitchKey);
   echo("top row h:", verticalKeySupportH + keySupportH + topKeyH);
 }
 
-module bottomRowKeyAssembly(pivotLength = 16.5, pivotHeight = 5, pivotDepth = 3.25, coneR1 = 2.5, coneH = 3, tolerancePerSide = 0.25, armWidth = 12, topArmLength = 35, armLength = 20, keyW = 13, keyD = 23, keyH = 2, topKeyD = 25, keySupportH = 0, verticalKeySupportH = 0, armsGap = 1, bridgeGap = 2, isRightWideKey = false, isLeftWideKey = false) {
-  rotate([0, 0, 180]) translate([0, topArmLength + armLength + 2.5, 0]) carvedArm(armL = armLength, armW = armWidth, levelH = 0.8, firstLevelH = 0.4, levelTranslateIncrement = 3, levels = 2, drawFakeKey = false);
+module bottomRowKeyAssembly(pivotLength = 16.5, pivotHeight = 5, pivotDepth = 3.25, coneR1 = 2.5, coneH = 3, tolerancePerSide = 0.25, armWidth = 12, topArmLength = 35, armLength = 20, keyW = 15.2, keyD = 21.75, keyH = 2, topKeyD = 25, keySupportH = 0, verticalKeySupportH = 0, armsGap = 1, bridgeGap = 2, isRightWideKey = false, isLeftWideKey = false) {
+  rotate([0, 0, 180]) translate([0, topArmLength + armLength + 0.5, 0]) carvedArm(armL = armLength, armW = armWidth, levelH = 0.8, firstLevelH = 0.4, levelTranslateIncrement = 3, levels = 2, drawFakeKey = false);
   armHeight = 1;
-  difference() {
+  translate([0, -0.25, 0]) difference() {
     union() {
-      translate([0, 5 - topArmLength - keyD / 2 - 2.5, verticalKeySupportH + keySupportH]) bottomRowKeySurface(keyW = keyW, keyD = keyD, keyH = keyH, isRightWideKey = isRightWideKey, isLeftWideKey = isLeftWideKey);
+      translate([0, 5 - topArmLength - keyD / 2 - 2.5 + 0.75, verticalKeySupportH + keySupportH]) bottomRowKeySurface(keyW = keyW, keyD = keyD, keyH = keyH, isRightWideKey = isRightWideKey, isLeftWideKey = isLeftWideKey);
     }
-    if (!isRightWideKey) for (i = [0, -1]) mirror([i, 0, 0]) translate([-keyW / 2 + (isLeftWideKey && i == 0 ? - 2.5 : 0), 5 - topArmLength - keyD - 2.5, armHeight]) bevel(r = keyW / 2, segments = 24);
-    else for (i = [0, -1]) mirror([i, 0, 0]) translate([-keyW / 2 + (isRightWideKey && i == 0 ? 0 : -2.5), 5 - topArmLength - keyD - 2.5, armHeight]) bevel(r = keyW / 2, segments = 24);
+    if (!isRightWideKey) for (i = [0, -1]) mirror([i, 0, 0]) translate([-keyW / 2 + (isLeftWideKey && i == 0 ? - 3.7 : 0), 5 - topArmLength - keyD - 1.75, armHeight]) bevel(r = keyW / 2, segments = 24);
+    else for (i = [0, -1]) mirror([i, 0, 0]) translate([-keyW / 2 + (isRightWideKey && i == 0 ? 0 : -3.7), 5 - topArmLength - keyD - 1.75, armHeight]) bevel(r = keyW / 2, segments = 24);
   }
   echo("bottom row h:", verticalKeySupportH + keySupportH + keyH);
 }
 
 module numberBarAssembly(pivotLength = 16.5, pivotHeight = 5, pivotDepth = 3.25, coneR1 = 2.5, coneH = 3, tolerancePerSide = 0.25, armWidth = 3.5, armLength = 40, topKeyW = 13, keyD = 7.5, topKeyH = 2, keySupportH = 0, verticalKeySupportH = 0.4, backlash = 0.0, keys = 5, numberKeyIndex = 2) {
  armHeight = 1 + 2 * 0.25;
- translate([0,0.01,0]) union() {
+ translate([-0.1,0.01,0]) union() {
   translate([-9.14 + numberKeyIndex * hKeyDistance, 0, 0]) carvedArm(armL = armLength, armW = 3.5, levelH = 1.6, firstLevelH = 0.4, levelTranslateIncrement = 2, levels = 2, drawFakeKey = false);
 
   translate([9 + -hKeyDistance, 0, 0]) mirror([0, 0, 0]) union() {
-    translate([5.5, 0.5, 0]) carvedArm(armL = 8, armW = 2, levelH = 0.25, firstLevelH = 0.4, levelTranslateIncrement = 7, levels = 2, drawFakeKey = false, bevel = false);
+    translate([3.8, 0.5, 0]) carvedArm(armL = 10, armW = 2, levelH = 0.25, firstLevelH = 0.4, levelTranslateIncrement = 9.99, levels = 2, drawFakeKey = false, bevel = false);
   }
   translate([9 + hKeyDistance * (keys - 1), 0, 0]) mirror([-1, 0, 0]) union() {
-    translate([5.5, 0.5, 0]) carvedArm(armL = 8, armW = 2, levelH = 0.25, firstLevelH = 0.4, levelTranslateIncrement = 7, levels = 2, drawFakeKey = false, bevel = false);
+    translate([3.5, 0.5, 0]) carvedArm(armL = 10, armW = 2, levelH = 0.25, firstLevelH = 0.4, levelTranslateIncrement = 9.99, levels = 2, drawFakeKey = false, bevel = false);
   }
   for (i = [0 : -1]) for (j = [0 : keys - 2]) translate([9 + j * hKeyDistance, 0, 0]) mirror([i, 0, 0]) union() {
     if(j != numberKeyIndex - 1) translate([0, 0.25, 0]) carvedArm(armL = 8, armW = armWidth, levelH = 0.8, firstLevelH = 0.4, levelTranslateIncrement = 2, levels = 2, drawFakeKey = false, bevel = false);
   }
+  translate([11.15, -5.35, 0]) cube([14, 8, 0.6]);
+  translate([-4.05, -5.35, 0]) cube([10.85, 8, 0.6]);
+  translate([11.15 + 1 * hKeyDistance, -5.35, 0]) cube([14.2, 8, 0.6]);
+  translate([11.15 + 2 * hKeyDistance + 0.2, -5.35, 0]) cube([13.8, 8, 0.6]);
+  translate([11 + 3 * hKeyDistance + 0.2, -5.35, 0]) cube([13.9, 8, 0.6]);
+  translate([11 + 4 * hKeyDistance + 0.2, -5.35, 0]) cube([11.15, 8, 0.6]);
 
-  translate([0, -9, 0]) numberBarSurface(keyW = topKeyW, keyD = keyD, keyH = topKeyH, keys = keys);
+  translate([0, -9.5, 0]) numberBarSurface(keyW = topKeyW, keyD = keyD, keyH = topKeyH, keys = keys);
   echo("bar h:", keySupportH + topKeyH);
  }
 }
 
 module topRowKeysAssembly(keys = 2, rightWideKeyIndex = 0, leftWideKeyIndex = 4, keyH = 4) {
   union() {
-    for (i = [0 : keys - 1]) translate([hKeyDistance * i, 0, 0]) topRowKeyAssembly(armHeight = 0.25 + i * 0.25, isRightWideKey = (i == rightWideKeyIndex ? true : false), isLeftWideKey = (i == leftWideKeyIndex ? true : false), topKeyH = keyH);
+    for (i = [0 : keys - 1]) translate([hKeyDistance * i - 0.1, 0, 0]) topRowKeyAssembly(armHeight = 0.25 + i * 0.25, isRightWideKey = (i == rightWideKeyIndex ? true : false), isLeftWideKey = (i == leftWideKeyIndex ? true : false), topKeyH = keyH, isNearNumberSwitchKey = [(i == 2 ? true : false), (i == 3 ? true : false)]);
   }
 }
 
 module bottomRowKeysAssembly3(keys = 2, rightWideKeyIndex = 0, leftWideKeyIndex = 4, keyH = 5.2) {
-  for (i = [0 : keys - 1]) translate([hKeyDistance * i, 0, 0]) bottomRowKeyAssembly(armHeight = 0.25 + i * 0.25, isRightWideKey = (i == rightWideKeyIndex ? true : false), isLeftWideKey = (i == leftWideKeyIndex ? true : false), keyH = keyH);
+  for (i = [0 : keys - 1]) translate([hKeyDistance * i - 0.1, 0, 0]) bottomRowKeyAssembly(armHeight = 0.25 + i * 0.25, isRightWideKey = (i == rightWideKeyIndex ? true : false), isLeftWideKey = (i == leftWideKeyIndex ? true : false), keyH = keyH);
 }
 
 module carvedArm(armL, armW, levelH, firstLevelH, levelTranslateIncrement, levels, drawFakeKey = false, bevel = true) {
@@ -199,10 +236,10 @@ module fakeKey(armL, armW) {
   keyArm(armWidth = armW, armLength = 23, armHeight = 3, pivotDepth = 0);
 }
 
-module frame(keys = 6, differenceH = -1, holeIncrease = [-3 , 0], frameH = 2, cutTopFrame = 2, cutBottomFrame = 0) {
+module frame(keys = 6, differenceH = -1, holeIncrease = [-0.8 , 0], frameH = 2, cutTopFrame = 2, cutBottomFrame = 0, topBevelsTopFrame = [false, false, false, false]) {
   difference() {
-    beveledCube([17 + hKeyDistance * keys, 79, frameH], center = false, bevelR = 8, bevelSegments = 20);
-    translate([9 - holeIncrease[0] / 2, 3, differenceH]) beveledCube([-1 + hKeyDistance * keys + holeIncrease[0], 66 + holeIncrease[1], frameH * 2], center = false);
+    advancedBeveledCube([17 + hKeyDistance * keys, 79, frameH], center = false, bevelR = 8, bevelSegments = 20, topBevelR = 2, topBevelSegments = 16, topBevels = topBevelsTopFrame);
+    translate([8.94 - holeIncrease[0] / 2, 5, differenceH]) beveledCube([-1 + hKeyDistance * keys + holeIncrease[0], 64 + holeIncrease[1], frameH * 2], center = false);
     if (cutTopFrame > 0) translate([-1,65,frameH - cutTopFrame]) cube([150,100,100]);
     else if (cutBottomFrame > 0) translate([-1,65+0.5,10]) rotate([180, 0, 0]) cube([150,100,100]);
     if (cutBottomFrame > 0) translate([-1,65+0.5,2]) rotate([20, 0, 0]) cube([150,100,100]);
@@ -215,8 +252,8 @@ module consonantsKeyboard(keys = 5, numberKeyIndex = 2, rightWideKeyIndex = 0, l
     if (drawBottomRow) translate([0, -10, 0]) bottomRowKeysAssembly3(keys = keys, rightWideKeyIndex = rightWideKeyIndex, leftWideKeyIndex = leftWideKeyIndex, keyH = keyH);
 
     if (drawFrame) translate(framePosition) difference() {
-      frame(keys = keys, frameH = frameH, cutTopFrame = cutTopFrame);
-      for (i = [0 : 1]) for (j = [0 : 1]) translate([5 + (25 + hKeyDistance * (keys - 1)) * i, 7 + (65) * j, -1]) cylinder(r = 3.5 / 2, h=50, $fn = 18);
+      frame(keys = keys, frameH = frameH, cutTopFrame = cutTopFrame, topBevelsTopFrame = [false, false, false, true]);
+      #for (i = [0 : 1]) for (j = [0 : 1]) translate([5 + (25 + hKeyDistance * (keys - 1)) * i, 7 + (65) * j, -1]) cylinder(r = 3.3 / 2, h=50, $fn = 18);
       for (i = [0 : 1]) for (j = [0 : 1]) translate([5 + (25 + hKeyDistance * (keys - 1)) * i, 7 + (65) * j, 2]) cylinder(r = 7 / 2, h=50, $fn = 36);
     }
     //scale([1, 1, 2]) dustCover();
@@ -224,14 +261,18 @@ module consonantsKeyboard(keys = 5, numberKeyIndex = 2, rightWideKeyIndex = 0, l
   }
 }
 
-module barKeyboard(keys = 6, numberKeyIndex = 3, rightWideKeyIndex = 0, leftWideKeyIndex = 5, drawBar = true, drawFrame = true, frameH = 4, keyH = 3.2, cutTopFrame = 0, cutBottomFrame = 3, logoH = 0.8) {
+module barKeyboard(keys = 6, numberKeyIndex = 3, rightWideKeyIndex = 0, leftWideKeyIndex = 5, drawBar = true, drawFrame = true, frameH = 4, keyH = 3.2, cutTopFrame = 0, cutBottomFrame = 3, logoH = 0.9) {
   union() {
-    color("red") translate([-63.4,-239.7,3.99]) scale([1.075,1.25,1]) linear_extrude(height = logoH, center = false, convexity = 10) import(file = "stenoboardcom_logo.dxf");
+    color("red") translate([-5,-177.75,3.99]) scale([0.54 * 1.5, 0.62 * 1.5, 1]) difference() {
+      linear_extrude(height = logoH, center = false, convexity = 10) import(file = "stenoboardcom_logo.dxf");
+      translate([123.25,120,-1]) cube([100,100,100]);
+    }
+    color("red") translate([-5,0.25,0]) scale([0.35, 0.35, 1]) linear_extrude(height = logoH + 4, center = false, convexity = 10) import(file = "utopen_logo.dxf");
     if (drawBar) numberBarAssembly(keys = keys, numberKeyIndex = numberKeyIndex, topKeyH = keyH);
 
     if (drawFrame) translate(framePosition) difference() {
-      frame(keys = keys, frameH = frameH, cutTopFrame = cutTopFrame, cutBottomFrame = cutBottomFrame);
-      for (i = [0 : 1]) for (j = [0 : 1]) translate([5 + (25 + hKeyDistance * (keys - 1)) * i, 6 + (66) * j, -1]) cylinder(r = 3.5 / 2, h=50, $fn = 18);
+      frame(keys = keys, frameH = frameH, cutTopFrame = cutTopFrame, cutBottomFrame = cutBottomFrame, topBevelsTopFrame = [false, true, false, false]);
+      for (i = [0 : 1]) for (j = [0 : 1]) translate([5 + (25 + hKeyDistance * (keys - 1)) * i, 6 + (66) * j, -1]) cylinder(r = 3.3 / 2, h=50, $fn = 18);
       for (i = [0 : 1]) for (j = [0 : 1]) translate([5 + (25 + hKeyDistance * (keys - 1)) * i, 6 + (66) * j, 2]) cylinder(r = 7 / 2, h=50, $fn = 36);
     }
   }
@@ -246,13 +287,16 @@ module screwHole(id, od, h, topOd, coneH, bevel = [false, false, false, false], 
     union() {
       cylinder(r = od / 2, h = h - coneH, $fn =30);
       translate([0,0,h-coneH]) cylinder(r1 = od / 2, r2 = topOd/2, h= coneH, $fn =30);
-      for (i = [0 : 3]) if(bevel[i]) rotate([0, 0, 45 + i * 90]) translate([od / 2 - 0.9, 0, 0]) rotate([90, 0, 0]) scale([1, 1, 1]) bevel(r = h * 0.9, length = 4, segments = 50);
+      for (i = [0 : 3]) if(bevel[i]) rotate([0, 0, 45 + i * 90]) translate([od / 2 - 0.9, 0, 0]) rotate([90, 0, 0]) scale([1, 1, 1]) {
+        bevel(r = h * 0.9, length = 4, segments = 50);
+        rotate([0, 180, 0]) translate([-1, 0, -2]) cube([2, h * 0.9, 4]);
+      }
     }
     translate([0, 0, holeStartH]) cylinder(r = id / 2, h = h*3, $fn =12);
   }
 }
 
-module vowelsFrame(baseH = -1, frameH = 4, isKeyboard = false) {
+module vowelsFrame(baseH = -1, frameH = 6.3, isKeyboard = false) {
   union() {
     difference() {
       union() {
@@ -266,7 +310,7 @@ module vowelsFrame(baseH = -1, frameH = 4, isKeyboard = false) {
         translate([8, 2, baseH]) cube([30, 61, rightVowelsScrewH * 2], center = false);
         translate([1 + 0.01, -1, frameH +0.01]) scale([1, 0.7, 1]) rotate([0, 0, 90]) rotate([-90,0,0]) bevel(r = 10, length = 100, segments = 40);
       }
-      if (isKeyboard) translate([-20, -10, -1]) cube([100,50.5,100]);
+      if (isKeyboard) #translate([-20, -10.3, -1]) cube([100,50.5,100]);
     }
     if (!isKeyboard) difference() {
       union() {
@@ -304,32 +348,32 @@ module vowelsKeyboard() {
       translate(rightEReference + [0, 9, 0]) {
         difference() {
           union() {
-            bottomRowKeySurface(keyW = 13, keyD = 23, keyH = 5.2);
+            bottomRowKeySurface(keyW = 14, keyD = 23, keyH = 5.2);
             translate([-3.5, 23 / 2 - 0.1, 0]) cube([7, 7,0.4]);
             translate([-3.5, 23 / 2 - 0.1 - 2, 0]) cube([7, 7,1]);
           }
-          translate([-13 / 2, -23 / 2, 0,]) bevel(r = 13 / 2, length = 20, segments = 24);
-          translate([13 / 2, -23 / 2, 0,]) rotate([0, 0, 90]) bevel(r = 13 / 2, length = 20, segments = 24);
+          translate([-14 / 2, -23 / 2, 0,]) bevel(r = 14 / 2, length = 20, segments = 24);
+          translate([14 / 2, -23 / 2, 0,]) rotate([0, 0, 90]) bevel(r = 13 / 2, length = 20, segments = 24);
         }
         translate([vowelsKeyDistance, 0, 0]) difference() {
           union() {
-            bottomRowKeySurface(keyW = 13, keyD = 23, keyH = 5.2);
+            bottomRowKeySurface(keyW = 14, keyD = 23, keyH = 5.2);
             translate([-3.5, 23 / 2 - 0.1, 0]) cube([7, 7,0.4]);
             translate([-3.5, 23 / 2 - 0.1 - 2, 0]) cube([7, 7,1]);
           }
-          translate([-13 / 2, -23 / 2, 0,]) bevel(r = 13 / 2, length = 20, segments = 24);
-          translate([13 / 2, -23 / 2, 0,]) rotate([0, 0, 90]) bevel(r = 13 / 2, length = 20, segments = 24);
+          translate([-14 / 2, -23 / 2, 0,]) bevel(r = 14 / 2, length = 20, segments = 24);
+          translate([14 / 2, -23 / 2, 0,]) rotate([0, 0, 90]) bevel(r = 13 / 2, length = 20, segments = 24);
         }
       }
     }
     translate(rightVowelsBasePosition) {
-      for(i = [0, 1]) for(j = [0, 1]) translate([4 + 38 * i, 6 + 37 * j, -1]) cylinder(r=4 / 2, h = 100);
+      for(i = [0, 1]) for(j = [0, 1]) translate([4 + 38 * i, 6 + 37 * j, -1]) cylinder(r=3.5 / 2, h = 100);
       translate([-2, 39, -1]) cylinder(r = 4, h = 10);
       translate([2 + 46, 39, -1]) cylinder(r = 4, h = 10);
     }
   }
   difference() {
-    translate(rightVowelsBasePosition + [8 +  15, 13.2 + 15, 0.3]) beveledCube([31.25, 28.75, 0.6], center = true, bevelY = [true, true], bevelR = 1.5);
+    translate(rightVowelsBasePosition + [8 +  15, 13.2 + 15 + 0.1, 0.3]) beveledCube([31.25-0.4, 28.75-0.2, 0.6], center = true, bevelY = [true, true], bevelR = 1.5);
     translate(rightVowelsBasePosition + [8 +  15, 13.2 + 15, 0]) cube([0.4, 28.75, 10], center = true);
     translate(rightVowelsBasePosition + [6.56, 41.5, 0]) cylinder(h = 10, r = 2, center = true, $fn = 24);
     translate(rightVowelsBasePosition + [(23 - 6.56) + 23, 41.5, 0]) cylinder(h = 10, r = 2, center = true, $fn = 24);
@@ -344,7 +388,7 @@ module base(keys = 6, baseH = 1.2, baseFrameH = mainRightScrewH + screwFrameVert
     union() {
       difference() {
         translate(framePosition) frame(keys, differenceH = baseH, holeIncrease = [2, 7], frameH = baseFrameH, cutTopFrame = 0);
-        translate(framePosition) translate([9 - 0 / 2 + (isRight ? 0 : 64), 2, baseH + 4]) beveledCube([46, 50, baseFrameH * 2], center = false);
+        translate(framePosition) translate([9 - 1.5 / 2 + (isRight ? 0 : 64 - 2/2), 2, baseH + 4]) beveledCube([46+1.5, 50, baseFrameH * 2], center = false);
         if(isRight) translate([-40, -27, -1]) cube([55,26,23]);
         if(isRight) translate([-6, 10, baseFrameH]) rotate([0, 0, -90]) rotate([0, 90, 0]) cylinder(r=3.75, h = 30, center = true, $fn=100);
         else translate([97.3, -10, baseFrameH]) rotate([0, 0, 90]) rotate([0, 90, 0]) cylinder(r=3.75, h = 50, center = true, $fn=100);
@@ -366,14 +410,15 @@ module base(keys = 6, baseH = 1.2, baseFrameH = mainRightScrewH + screwFrameVert
 
 module dustCover() {
   color("red") difference() {
-    translate([-6.85, -66.1, 0]) beveledCube([-1 + hKeyDistance * 6 + 0 - 3.8, 66 + 0 - 0.8, 0.6], center = false, bevelR = 1.5);
+    translate([-7.85, -64.1, 0]) beveledCube([hKeyDistance * 6 - 2.9, 64 + 0 - 0.8, 0.6], center = false, bevelR = 1.5);
     for (i = [-1 : 1]) translate([-6.85 + (- 1 + hKeyDistance * 6 - 3.8) / 2 + hKeyDistance * i, -66.1 + (66 - 0.8) / 2, 0]) cube([0.4, 66 - 0.8, 5], center = true);
     for (i = [-0.995, 1]) translate([-6.85 + (- 1 + hKeyDistance * 6 - 3.8) / 2 + hKeyDistance * 1.94 * i, -66.1 + (66 - 0.8) / 2, 0]) cube([0.4, 66 - 0.8, 5], center = true);
     translate([45.75, -41.25, 0.15]) cube([120, 0.4, 10], center = true);
     
-    for (i = [-2 : 3]) translate([-6.85 + (- 1 + hKeyDistance * 6 - 3.8) / 2 - hKeyDistance / 2 + 0.1 + i * hKeyDistance, -79, 0]) beveledCube([12.8, 29.25, 10], center = true, bevelR = 1);
+    for (i = [-2 : 3]) translate([-6.85 + (- 1 + hKeyDistance * 6 - 3.8) / 2 - hKeyDistance / 2 + i * hKeyDistance, -77, 0]) beveledCube([12.8, 29.25, 10], center = true, bevelR = 1);
+    for (i = [-2 : 3]) translate([-6.85 + (- 1 + hKeyDistance * 6 - 3.8) / 2 - hKeyDistance / 2 + i * hKeyDistance, 5, 0]) mirror([0, -1, 0]) beveledCube([12.8, 29.25, 10], center = true, bevelR = 1);
 
-    translate([45.75 - 1.5 - 0.6, -41, -5]) scale([1.4, 1.8, 10]) barButtonContact();
+    translate([45.75 - 1.5 - 0.6, -40.8, -4.5]) scale([1.4, 1.5, 10]) barButtonContact();
   }
 }
 
@@ -403,11 +448,11 @@ module cover(keys = 6, baseH = 0.6, lowScrewH = 1.2 + 2, highScrewH = 1.2 + 2 + 
 
 module rightAssembly(drawConsonants = true, drawNumbers = true) {
   translate([-45.73, 50, 0]) union() {
-    if (drawConsonants) color("white") translate([0, 0, 27.9]) consonantsKeyboard(keys = 6, numberKeyIndex = 3, rightWideKeyIndex = 0, leftWideKeyIndex = 5, drawTopRow = true, drawBottomRow = true, drawFrame = true);
-    if (drawNumbers) color("white") translate([0, 0, 0]) translate([0, 0, 2+27.9]) barKeyboard();
-    color("green") translate([44.35, -39.75, 27.9]) barButtonContact();
+    if (drawConsonants) color("white") translate([0, 0, 28.8 - 0]) consonantsKeyboard(keys = 6, numberKeyIndex = 3, rightWideKeyIndex = 0, leftWideKeyIndex = 5, drawTopRow = true, drawBottomRow = true, drawFrame = true);
+    if (drawNumbers) color("white") translate([0, 0, 0]) translate([0, 0, 2+28.8 + 0]) barKeyboard();
+    color("green") translate([44.35, -39.75, 28.8]) barButtonContact();
     color("red") base();
     //translate([-45.73, 50, 0]) base(isRight = false);
-    color("white") translate([0, 0, 18.6]) vowelsKeyboard();
+    color("white") translate([0, 0, 19.5]) vowelsKeyboard();
   }
 }
