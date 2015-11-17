@@ -21,7 +21,7 @@
 
 
 hKeyDistance = 18.325;
-vowelsKeyDistance = 14.5;
+vowelsKeyDistance = 15.5;
 framePosition = [-17.75, -69.5, 0];
 drawKeySupport = false;
 drawKeySurfaceTopBevel = true;
@@ -39,7 +39,7 @@ screw2 = [-12.75, 2.5, 0];
 screw3 = [-12.75, -62.5, 0];
 screw4 = [103.9, -62.5, 0];
 frameScrewPositions = [screw1, screw2, screw3, screw4];
-frameScrewD = 3.0;
+frameScrewD = 3.2;
 mainRightScrewPositions = [[-37.465,11.43,0], [40.64,13.97,0], [-34.29,-10.795,0], [34.925,-10.795,0]];
 mainRightScrewBevels = [[false, false, true, false], [true, false, false, true], [false, true, true, true], [true, false, true, true]];
 mainRightScrewH = 20.1;
@@ -49,11 +49,11 @@ mainLeftScrewBevels = [[true, true, true, true], [true, true, true, true], [true
 rightVowelsScrewPositions = [[-1.27,9.525,0], [16.51,9.525,0], [7.62,-9.525,0]];
 rightVowelsScrewBevels = [[true, true, true, true], [true, true, true, true], [true, true, false, false]];
 rightVowelsScrewH = mainRightScrewH - 9.3;
-rightVowelsScrewD = 3.0;
+rightVowelsScrewD = 3.2;
 arduinoScrewPositions = [[0, 0, 0], [50.8, -15.2, 0], [50.8, -15.2 - 27.9, 0], [-1.3, -15.2 -27.9 -5.1, 0]];
 arduinoScrewOffset = [-17.5, 45, 0];
 arduinoScrewH = 6;
-arduinoScrewD = 3;
+arduinoScrewD = 3.15;
 rightVowelsBasePosition = [-8.5, -107, 0];
 rightVowelsBaseScrewD = 3.0;
 %translate(boardCenter) cylinder(r=1,h=10,$fn=6);
@@ -72,20 +72,22 @@ rightVowelsBaseScrewD = 3.0;
 //translate([-46, 35, 0]) consonantsKeyboard(keys = 6, numberKeyIndex = 3, rightWideKeyIndex = 0, leftWideKeyIndex = 5, drawTopRow = true, drawBottomRow = true, drawFrame = true);
 //color("gray") 
 //translate([-46, 35, 0]) translate([0,0,2])
-translate([-46, 10, 0]) 
-barKeyboard();
+//translate([-46, 10, 0]) 
+//barKeyboard();
 //barButtonContact();
 //rightBaseBridgeTest();
 //translate([-45.73, 50, 0]) base();
 //translate([0, 130, 0])
-//translate([-45.73, 50, 0]) base(isRight = false);
+translate([-45.73, 50, 0]) base(isRight = false);
 //translate([0, 0, rightVowelsScrewH + screwFrameVerticalOffset + 0.2])
 //translate([-14.5, 75, 0]) 
 //translate([-14.5, 24, 0]) vowelsKeyboard();
 //translate([-45.73, 50, 0]) cover();
 //rightAssembly(drawConsonants = true, drawNumbers = true);
 
-
+// printing module calls, delete these when finished
+//translate([-34.5, 24, 0]) vowelsKeyboard();
+//translate([14.5, 24, 0]) vowelsKeyboard();
 
 // MODULES
 
@@ -286,7 +288,7 @@ module screwHole(id, od, h, topOd, coneH, bevel = [false, false, false, false], 
   difference() {
     union() {
       cylinder(r = od / 2, h = h - coneH, $fn =30);
-      translate([0,0,h-coneH]) cylinder(r1 = od / 2, r2 = topOd/2, h= coneH, $fn =30);
+      translate([0,0,h - coneH - 0.001]) cylinder(r1 = od / 2, r2 = topOd/2, h= coneH + 0.001, $fn =30);
       for (i = [0 : 3]) if(bevel[i]) rotate([0, 0, 45 + i * 90]) translate([od / 2 - 0.9, 0, 0]) rotate([90, 0, 0]) scale([1, 1, 1]) {
         bevel(r = h * 0.9, length = 4, segments = 50);
         rotate([0, 180, 0]) translate([-1, 0, -2]) cube([2, h * 0.9, 4]);
@@ -346,7 +348,7 @@ module vowelsKeyboard() {
     union() {
       translate(rightVowelsBasePosition) vowelsFrame(isKeyboard = true);
       translate(rightEReference + [0, 9, 0]) {
-        difference() {
+        translate([-0.5, 0, 0]) difference() {
           union() {
             bottomRowKeySurface(keyW = 14, keyD = 23, keyH = 5.2);
             translate([-3.5, 23 / 2 - 0.1, 0]) cube([7, 7,0.4]);
@@ -355,7 +357,7 @@ module vowelsKeyboard() {
           translate([-14 / 2, -23 / 2, 0,]) bevel(r = 14 / 2, length = 20, segments = 24);
           translate([14 / 2, -23 / 2, 0,]) rotate([0, 0, 90]) bevel(r = 13 / 2, length = 20, segments = 24);
         }
-        translate([vowelsKeyDistance, 0, 0]) difference() {
+        translate([vowelsKeyDistance - 0.5, 0, 0]) difference() {
           union() {
             bottomRowKeySurface(keyW = 14, keyD = 23, keyH = 5.2);
             translate([-3.5, 23 / 2 - 0.1, 0]) cube([7, 7,0.4]);
@@ -399,9 +401,9 @@ module base(keys = 6, baseH = 1.2, baseFrameH = mainRightScrewH + screwFrameVert
       translate([isRight ? 70.5 : 20.9,-65.2,12.5]) cube([62,4,25], center=true);
       translate([isRight ? 39 : 53,-65.2,9]) cube([3,4,18], center=true);
       if (drawVowels) translate([isRight ? 0 : leftVowelsOffset, 0, 0]) vowelsBase(baseH = baseH);
-      if(isRight) for(i = [0:3]) translate(boardCenter + mainRightScrewPositions[i]) screwHole(mainRightScrewD, mainRightScrewD + 2.6, mainRightScrewH, mainRightScrewD + 2, mainRightScrewD + 2, mainRightScrewBevels[i], mainRightScrewH - 12);
-      else for(i = [0:3]) translate(boardCenter + mainLeftScrewPositions[i]) screwHole(mainRightScrewD, mainRightScrewD + 2.6, mainRightScrewH, mainRightScrewD + 2, mainRightScrewD + 2, mainLeftScrewBevels[i], mainRightScrewH - 12);
-      if(isRight) for(i = [0:3]) translate(boardCenter + arduinoScrewOffset + arduinoScrewPositions[i]) screwHole(arduinoScrewD, arduinoScrewD + 6, arduinoScrewH, arduinoScrewD + 2, arduinoScrewD + 1);
+      if(isRight) for(i = [0:3]) translate(boardCenter + mainRightScrewPositions[i]) screwHole(mainRightScrewD, mainRightScrewD + 2.6, mainRightScrewH, mainRightScrewD + 2.6, mainRightScrewD + 2, mainRightScrewBevels[i], mainRightScrewH - 12);
+      else for(i = [0:3]) translate(boardCenter + mainLeftScrewPositions[i]) screwHole(mainRightScrewD, mainRightScrewD + 2.6, mainRightScrewH, mainRightScrewD + 2.6, mainRightScrewD + 2, mainLeftScrewBevels[i], mainRightScrewH - 12);
+      if(isRight) for(i = [0:3]) translate(boardCenter + arduinoScrewOffset + arduinoScrewPositions[i]) screwHole(arduinoScrewD, arduinoScrewD + 6, arduinoScrewH, arduinoScrewD + 2.6, arduinoScrewD + 1);
       %translate(boardCenter + arduinoScrewOffset + arduinoScrewPositions[0] + [-15.3, 2.5 - 53.3, arduinoScrewH]) cube([68.6, 53.3, 1.4]);
     }
     for(i = [0:3]) translate(frameScrewPositions[i] + [0, 0, -1]) cylinder(r = frameScrewD / 2, h = 100);
