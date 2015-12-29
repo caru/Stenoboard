@@ -56,6 +56,7 @@ arduinoScrewH = 6;
 arduinoScrewD = 3.15;
 rightVowelsBasePosition = [-8.5, -107, 0];
 rightVowelsBaseScrewD = 3.0;
+dustCoverGap = 0.8;
 %translate(boardCenter) cylinder(r=1,h=10,$fn=6);
 %translate(rightRReference) cylinder(r=1,h=10,$fn=6);
 %translate(rightEReference + [0, 0, 30]) cylinder(r=1,h=10,$fn=6);
@@ -78,12 +79,22 @@ rightVowelsBaseScrewD = 3.0;
 //rightBaseBridgeTest();
 //translate([-45.73, 50, 0]) base();
 //translate([0, 130, 0])
-translate([-45.73, 50, 0]) base(isRight = false);
+//translate([-45.73, 50, 0]) base(isRight = false);
 //translate([0, 0, rightVowelsScrewH + screwFrameVerticalOffset + 0.2])
 //translate([-14.5, 75, 0]) 
-//translate([-14.5, 24, 0]) vowelsKeyboard();
+translate([-14.5, 24, 0]) vowelsKeyboard();
 //translate([-45.73, 50, 0]) cover();
 //rightAssembly(drawConsonants = true, drawNumbers = true);
+
+// vowels plate
+//translate([-14.5, 24, 0]) vowelsKeyboard();
+//translate([40, 24, 0]) vowelsKeyboard();
+//translate([-14.5, -24, 0]) vowelsKeyboard();
+//translate([40, -24, 0]) vowelsKeyboard();
+
+// numbers bar plate
+//barKeyboard();
+//translate([86, -55, 0]) rotate([0, 0, 180]) barKeyboard();
 
 // printing module calls, delete these when finished
 //translate([-34.5, 24, 0]) vowelsKeyboard();
@@ -198,12 +209,12 @@ module numberBarAssembly(pivotLength = 16.5, pivotHeight = 5, pivotDepth = 3.25,
   for (i = [0 : -1]) for (j = [0 : keys - 2]) translate([9 + j * hKeyDistance, 0, 0]) mirror([i, 0, 0]) union() {
     if(j != numberKeyIndex - 1) translate([0, 0.25, 0]) carvedArm(armL = 8, armW = armWidth, levelH = 0.8, firstLevelH = 0.4, levelTranslateIncrement = 2, levels = 2, drawFakeKey = false, bevel = false);
   }
-  translate([11.15, -5.35, 0]) cube([14, 8, 0.6]);
-  translate([-4.05, -5.35, 0]) cube([10.85, 8, 0.6]);
-  translate([11.15 + 1 * hKeyDistance, -5.35, 0]) cube([14.2, 8, 0.6]);
-  translate([11.15 + 2 * hKeyDistance + 0.2, -5.35, 0]) cube([13.8, 8, 0.6]);
-  translate([11 + 3 * hKeyDistance + 0.2, -5.35, 0]) cube([13.9, 8, 0.6]);
-  translate([11 + 4 * hKeyDistance + 0.2, -5.35, 0]) cube([11.15, 8, 0.6]);
+  translate([10.75 + dustCoverGap, -5.35 - 0.4 + dustCoverGap, 0]) cube([14.8 - dustCoverGap * 2, 8, 0.6]);
+  translate([-4.45 + dustCoverGap, -5.35 - 0.4 + dustCoverGap, 0]) cube([11.65 - dustCoverGap * 2, 8, 0.6]);
+  translate([10.75 + dustCoverGap + 1 * hKeyDistance, -5.35 - 0.4 + dustCoverGap, 0]) cube([15 - dustCoverGap * 2, 8, 0.6]);
+  translate([10.75 + dustCoverGap + 2 * hKeyDistance + 0.2, -5.35 - 0.4 + dustCoverGap, 0]) cube([14.6 - dustCoverGap * 2, 8, 0.6]);
+  translate([10.6 + dustCoverGap + 3 * hKeyDistance + 0.2, -5.35 - 0.4 + dustCoverGap, 0]) cube([14.35 - dustCoverGap * 2, 8, 0.6]);
+  translate([10.6 + dustCoverGap + 4 * hKeyDistance + 0.2, -5.35 - 0.4 + dustCoverGap, 0]) cube([11.6 - dustCoverGap * 2, 8, 0.6]);
 
   translate([0, -9.5, 0]) numberBarSurface(keyW = topKeyW, keyD = keyD, keyH = topKeyH, keys = keys);
   echo("bar h:", keySupportH + topKeyH);
@@ -312,7 +323,7 @@ module vowelsFrame(baseH = -1, frameH = 6.3, isKeyboard = false) {
         translate([8, 2, baseH]) cube([30, 61, rightVowelsScrewH * 2], center = false);
         translate([1 + 0.01, -1, frameH +0.01]) scale([1, 0.7, 1]) rotate([0, 0, 90]) rotate([-90,0,0]) bevel(r = 10, length = 100, segments = 40);
       }
-      if (isKeyboard) #translate([-20, -10.3, -1]) cube([100,50.5,100]);
+      if (isKeyboard) translate([-20, -10.3, -1]) cube([100,50.5,100]);
     }
     if (!isKeyboard) difference() {
       union() {
@@ -375,10 +386,10 @@ module vowelsKeyboard() {
     }
   }
   difference() {
-    translate(rightVowelsBasePosition + [8 +  15, 13.2 + 15 + 0.1, 0.3]) beveledCube([31.25-0.4, 28.75-0.2, 0.6], center = true, bevelY = [true, true], bevelR = 1.5);
-    translate(rightVowelsBasePosition + [8 +  15, 13.2 + 15, 0]) cube([0.4, 28.75, 10], center = true);
-    translate(rightVowelsBasePosition + [6.56, 41.5, 0]) cylinder(h = 10, r = 2, center = true, $fn = 24);
-    translate(rightVowelsBasePosition + [(23 - 6.56) + 23, 41.5, 0]) cylinder(h = 10, r = 2, center = true, $fn = 24);
+    translate(rightVowelsBasePosition + [8 +  15, 13.2 + 15 + 0.1 - (dustCoverGap - 0.4) / 2, 0.3]) beveledCube([31.25-0.4, 28.75-0.2-(dustCoverGap-0.4), 0.6], center = true, bevelY = [true, true], bevelR = 1.5);
+    translate(rightVowelsBasePosition + [8 +  15, 13.2 + 15, 0]) cube([dustCoverGap, 28.75, 10], center = true);
+    translate(rightVowelsBasePosition + [6.56, 41.5, 0]) cylinder(h = 10, r = 2 + dustCoverGap - 0.4, center = true, $fn = 24);
+    translate(rightVowelsBasePosition + [(23 - 6.56) + 23, 41.5, 0]) cylinder(h = 10, r = 2 + dustCoverGap - 0.4, center = true, $fn = 24);
     translate(rightVowelsBasePosition + [23 - 7.3, 56, 0]) beveledCube([7.5, 28.75, 10], center = true, bevelR = 1);
     translate(rightVowelsBasePosition + [23 + 7.2, 56, 0]) beveledCube([7.5, 28.75, 10], center = true, bevelR = 1);
   }
@@ -401,8 +412,8 @@ module base(keys = 6, baseH = 1.2, baseFrameH = mainRightScrewH + screwFrameVert
       translate([isRight ? 70.5 : 20.9,-65.2,12.5]) cube([62,4,25], center=true);
       translate([isRight ? 39 : 53,-65.2,9]) cube([3,4,18], center=true);
       if (drawVowels) translate([isRight ? 0 : leftVowelsOffset, 0, 0]) vowelsBase(baseH = baseH);
-      if(isRight) for(i = [0:3]) translate(boardCenter + mainRightScrewPositions[i]) screwHole(mainRightScrewD, mainRightScrewD + 2.6, mainRightScrewH, mainRightScrewD + 2.6, mainRightScrewD + 2, mainRightScrewBevels[i], mainRightScrewH - 12);
-      else for(i = [0:3]) translate(boardCenter + mainLeftScrewPositions[i]) screwHole(mainRightScrewD, mainRightScrewD + 2.6, mainRightScrewH, mainRightScrewD + 2.6, mainRightScrewD + 2, mainLeftScrewBevels[i], mainRightScrewH - 12);
+      if(isRight) for(i = [0:3]) translate(boardCenter + mainRightScrewPositions[i]) screwHole(mainRightScrewD, mainRightScrewD + 6, mainRightScrewH, mainRightScrewD + 2.6, 2, mainRightScrewBevels[i], mainRightScrewH - 12);
+      else for(i = [0:3]) translate(boardCenter + mainLeftScrewPositions[i]) screwHole(mainRightScrewD, mainRightScrewD + 6, mainRightScrewH, mainRightScrewD + 2.6, 2, mainLeftScrewBevels[i], mainRightScrewH - 12);
       if(isRight) for(i = [0:3]) translate(boardCenter + arduinoScrewOffset + arduinoScrewPositions[i]) screwHole(arduinoScrewD, arduinoScrewD + 6, arduinoScrewH, arduinoScrewD + 2.6, arduinoScrewD + 1);
       %translate(boardCenter + arduinoScrewOffset + arduinoScrewPositions[0] + [-15.3, 2.5 - 53.3, arduinoScrewH]) cube([68.6, 53.3, 1.4]);
     }
@@ -412,13 +423,13 @@ module base(keys = 6, baseH = 1.2, baseFrameH = mainRightScrewH + screwFrameVert
 
 module dustCover() {
   color("red") difference() {
-    translate([-7.85, -64.1, 0]) beveledCube([hKeyDistance * 6 - 2.9, 64 + 0 - 0.8, 0.6], center = false, bevelR = 1.5);
-    for (i = [-1 : 1]) translate([-6.85 + (- 1 + hKeyDistance * 6 - 3.8) / 2 + hKeyDistance * i, -66.1 + (66 - 0.8) / 2, 0]) cube([0.4, 66 - 0.8, 5], center = true);
-    for (i = [-0.995, 1]) translate([-6.85 + (- 1 + hKeyDistance * 6 - 3.8) / 2 + hKeyDistance * 1.94 * i, -66.1 + (66 - 0.8) / 2, 0]) cube([0.4, 66 - 0.8, 5], center = true);
-    translate([45.75, -41.25, 0.15]) cube([120, 0.4, 10], center = true);
+    translate([-7.85 + dustCoverGap / 2, -64.1 + dustCoverGap / 2, 0]) beveledCube([hKeyDistance * 6 - 2.9 - ((dustCoverGap - 0.4) * 2), 64 + 0 - (dustCoverGap * 2), 0.6], center = false, bevelR = 1.5);
+    for (i = [-1 : 1]) translate([-6.85 + (- 1 + hKeyDistance * 6 - 3.8) / 2 + hKeyDistance * i, -66.1 + (66 - 0.8) / 2, 0]) cube([dustCoverGap, 66 - 0.8, 5], center = true);
+    for (i = [-0.995, 1]) translate([-6.85 + (- 1 + hKeyDistance * 6 - 3.8) / 2 + hKeyDistance * 1.94 * i, -66.1 + (66 - 0.8) / 2, 0]) cube([dustCoverGap, 66 - 0.8, 5], center = true);
+    translate([45.75, -41.25, 0.15]) cube([120, dustCoverGap, 10], center = true);
     
-    for (i = [-2 : 3]) translate([-6.85 + (- 1 + hKeyDistance * 6 - 3.8) / 2 - hKeyDistance / 2 + i * hKeyDistance, -77, 0]) beveledCube([12.8, 29.25, 10], center = true, bevelR = 1);
-    for (i = [-2 : 3]) translate([-6.85 + (- 1 + hKeyDistance * 6 - 3.8) / 2 - hKeyDistance / 2 + i * hKeyDistance, 5, 0]) mirror([0, -1, 0]) beveledCube([12.8, 29.25, 10], center = true, bevelR = 1);
+    for (i = [-2 : 3]) translate([-6.85 + (- 1 + hKeyDistance * 6 - 3.8) / 2 - hKeyDistance / 2 + i * hKeyDistance, -77, 0]) beveledCube([12.8 + (dustCoverGap * 2 - 0.8), 29.25, 10], center = true, bevelR = 1);
+    for (i = [-2 : 3]) translate([-6.85 + (- 1 + hKeyDistance * 6 - 3.8) / 2 - hKeyDistance / 2 + i * hKeyDistance, 5, 0]) mirror([0, -1, 0]) beveledCube([12.8 + (dustCoverGap * 2 - 0.8), 29.25, 10], center = true, bevelR = 1);
 
     translate([45.75 - 1.5 - 0.6, -40.8, -4.5]) scale([1.4, 1.5, 10]) barButtonContact();
   }
